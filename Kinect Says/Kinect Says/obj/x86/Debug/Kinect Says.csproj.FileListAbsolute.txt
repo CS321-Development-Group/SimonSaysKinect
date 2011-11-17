@@ -1,0 +1,17 @@
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Kinect Says.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Kinect Says.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Coding4Fun.Kinect.Wpf.dll
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Microsoft.Expression.Drawing.dll
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\Kinect Says_MarkupCompile.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\Kinect Says.g.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\Kinect_Says.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\Kinect Says.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\Kinect Says.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\xaml\MainWindow.baml
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\xaml\MainWindow.g.cs
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect Says\Kinect Says\obj\x86\Debug\xaml\App.g.cs
