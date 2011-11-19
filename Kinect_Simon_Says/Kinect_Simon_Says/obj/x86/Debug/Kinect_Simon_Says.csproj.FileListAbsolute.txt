@@ -1,0 +1,16 @@
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.baml
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.g.cs
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\App.g.cs
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_MarkupCompile.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.g.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe.config
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb

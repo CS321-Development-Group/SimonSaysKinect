@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Microsoft.Samples.Kinect.WpfViewers.KinectDiagnosticViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:kt="clr-namespace:Microsoft.Samples.Kinect.WpfViewers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <WrapPanel Orientation="Horizontal">
+        <StackPanel>
+            <TextBlock FontSize="12" Text="Color Image" HorizontalAlignment="Center"/>
+            <kt:KinectColorViewer Width="400" Height="300" x:Name="kinectColorViewer" 
+                                  x:FieldModifier="public" Margin="10 0 10 10"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock FontSize="12" Text="Depth Image" HorizontalAlignment="Center"/>
+            <kt:KinectDepthViewer Width="400" Height="300" x:Name="kinectDepthViewer" 
+                                  x:FieldModifier="public" Margin="10 0 10 10"/>
+        </StackPanel>
+        <StackPanel Name="skeletonPanel">
+            <TextBlock FontSize="12" Text="Detected Skeletons" HorizontalAlignment="Center"/>
+            <Canvas Width="400" Height="300" Name="skeletonCanvas" Margin="10 0 10 10"
+                    Background="Black" ClipToBounds="True"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical">
+            <TextBlock FontSize="12" HorizontalAlignment="Center" >Framerate</TextBlock>
+            <StackPanel Orientation="Vertical" TextBlock.Foreground="White" Background="Black">
+                <TextBlock FontSize="72" Name="frameRate" HorizontalAlignment="Center"
+                           Text="{Binding ElementName=kinectDepthViewer,Path=FrameRate}" />
+                <TextBlock FontSize="18" HorizontalAlignment="Center">FPS</TextBlock>
+            </StackPanel>
+            <TextBlock FontSize="12" HorizontalAlignment="Center" >Kinect Index</TextBlock>
+            <StackPanel TextBlock.Foreground="White" Background="Black">
+                <TextBlock FontSize="10" Name="kinectIndex" Text="--" HorizontalAlignment="Center" />
+            </StackPanel>
+            
+            <TextBlock FontSize="12" HorizontalAlignment="Center" >Kinect Name</TextBlock>
+            <TextBox FontSize="10" Name="kinectName" Text="--" HorizontalAlignment="Center" 
+                     BorderThickness="0" Background="Black" Foreground="White" />
+            
+            <TextBlock FontSize="12" HorizontalAlignment="Center" >Status</TextBlock>
+            <StackPanel TextBlock.Foreground="White" Background="Black">
+                <TextBlock FontSize="36" Name="kinectStatus" Text="Not Connected" HorizontalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+    </WrapPanel>
+</UserControl>
