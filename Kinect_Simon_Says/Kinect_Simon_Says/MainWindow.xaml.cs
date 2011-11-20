@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Microsoft.Research.Kinect.Audio;
+using System.Windows.Controls;
 using Microsoft.Research.Kinect.Nui;
+using System.Collections.Generic;
+
+
 
 namespace Kinect_Simon_Says
 {
@@ -24,7 +25,8 @@ namespace Kinect_Simon_Says
         const int NumIntraFrames = 3;
         const double MaxFramerate = 70;
         const double MinFramerate = 15;
-        //Dictionary<int, Player> players = new Dictionary<int, Player>();
+        const int POSE_TIMER_INCREMENT_PER_FRAME = 1;
+        Dictionary<int, Player> players = new Dictionary<int, Player>();
 
         DateTime lastFrameDrawn = DateTime.MinValue;
         DateTime predNextFrame = DateTime.MinValue;
@@ -34,13 +36,14 @@ namespace Kinect_Simon_Says
         // Player(s) placement in scene (z collapsed):
         Rect playerBounds;
         Rect screenRect;
-
         double targetFramerate = MaxFramerate;
         int frameCount = 0;
         bool runningGameThread = false;
+        CircleTimer poseTimer = null;
 
         RuntimeOptions runtimeOptions;
         //SpeechRecognizer speechRecognizer = null;
+
         #endregion Private State
         #region Window
         /// <summary>
@@ -74,11 +77,12 @@ namespace Kinect_Simon_Says
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //CircleTimer mytimer;
-
             playfield.ClipToBounds = true;
-
+           
             game = new Game(targetFramerate, NumIntraFrames);
+            game.SetGameMode(Game.GameMode.Solo);
+
+            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 110, 130);
 
             UpdatePlayfieldSize();
 
@@ -323,10 +327,9 @@ namespace Kinect_Simon_Says
                 }
             }
         }
-
         private Runtime _Kinect;
-        private ErrorCondition currentErrorCondition;
 
+        private ErrorCondition currentErrorCondition;
         internal enum ErrorCondition
         {
             None,
@@ -350,7 +353,6 @@ namespace Kinect_Simon_Says
                 return;
             }
         }
-
         ////#region Kinect Skeleton processing
         ////void SkeletonsReady(object sender, SkeletonFrameReadyEventArgs e)
         ////{
@@ -484,8 +486,8 @@ namespace Kinect_Simon_Says
             playerBounds.Y = playfield.ActualHeight * 0.2;
             playerBounds.Height = playfield.ActualHeight * 0.75;
 
-            //foreach (var player in players)
-            //    player.Value.setBounds(playerBounds);
+            foreach (var player in players)
+                player.Value.setBounds(playerBounds);
         }
         //#endregion Kinect Skeleton processing
 
@@ -549,13 +551,23 @@ namespace Kinect_Simon_Says
                 //    }
                 game.AdvanceFrame();
             }
-
             //// Draw new Wpf scene by adding all objects to canvas
-            //playfield.Children.Clear();
-            //fallingThings.DrawFrame(playfield.Children);
-            //foreach (var player in players)
-            //    player.Value.Draw(playfield.Children);
-            //BannerText.Draw(playfield.Children);
+            playfield.Children.Clear();
+            HUD.Children.Clear();
+            if (poseTimer.WedgeAngle < 360)
+            {
+                poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
+            }
+            else
+            {
+                poseTimer.WedgeAngle = 0;
+                //ValidatePose function call here
+            }
+            poseTimer.Draw(HUD.Children);
+            game.DrawFrame(playfield.Children);
+            foreach (var player in players)
+                player.Value.Draw(playfield.Children);
+            BannerText.Draw(playfield.Children);
             //FlyingText.Draw(playfield.Children);
 
             //CheckPlayers();
