@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Positions>
+  <Pose name="pose1">
+    <head>
+      <x></x>
+      <y></y>
+    </head>
+    <shoulder>
+      <x></x>
+      <y></y>
+    </shoulder>
+    <hip>
+      <x></x>
+      <y></y>
+    </hip>
+    <relbow>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </relbow>
+    <rhand>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </rhand>
+    <lelbow>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </lelbow>
+    <lhand>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </lhand>
+    <rknee>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </rknee>
+    <rfoot>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </rfoot>
+    <lknee>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </lknee>
+    <lfoot>
+      <x></x>
+      <y></y>
+      <theta></theta>
+    </lfoot>
+  </Pose>
+</Positions>

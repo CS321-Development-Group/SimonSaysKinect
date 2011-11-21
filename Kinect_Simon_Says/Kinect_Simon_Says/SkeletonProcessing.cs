@@ -33,11 +33,13 @@ namespace Kinect_Simon_Says
         public float x;
         public float y;
         public float z;
-        public coord(float _x = 0f, float _y = 0f, float _z = 0f)
+        public double theta;
+        public coord(float _x = 0f, float _y = 0f, float _z = 0f, double _theta = 0)
         {
             x = _x;
             y = _y;
             z = _z;
+            theta = _theta;
         }
     }
     public class SkeletonProcessing:MainWindow

@@ -46,3 +46,19 @@ C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86
 C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
 C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe.config
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.pdb
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.baml
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.g.cs
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\App.g.cs
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_MarkupCompile.cache
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.g.resources
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
+F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
