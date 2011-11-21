@@ -16,6 +16,15 @@
         <Canvas Name="HUD" Height="600" Width="600">
             
         </Canvas>
+        <Canvas Name="SkeltalTracking">
+            <Ellipse Canvas.Left="0" Canvas.Top="1" Height="10" Stroke="Black" Fill="Orange" Width="10" Name="headEllipse"/>
+            <Ellipse Canvas.Left="50" Canvas.Top="0" Height="10" Stroke="Black" Fill="Blue"  Width="10" Name="rightEllipse"/>
+            <Ellipse Canvas.Left="100" Canvas.Top="0" Height="10" Stroke="Black" Fill="Green"  Width="10" Name="leftEllipse"/>
+            <Button Name="test" Canvas.Left="50" Canvas.Top="451" Height="67" Width="67" Click="test_Click" Content="Exit" />
+            <TextBox Name="kinectvalues" Canvas.Right="0" Canvas.Bottom="0" Height="60" Width="199" FontSize="10" Canvas.Left="Auto" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" />
+
+        </Canvas>
+
         <!--kt:KinectColorViewer x:Name="kinectViewer" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" /-->
     </Grid>
 

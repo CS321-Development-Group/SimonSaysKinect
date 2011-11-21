@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using System.Windows.Controls;
 using Microsoft.Research.Kinect.Nui;
 using System.Collections.Generic;
+using System.Linq;
 
 
 
@@ -43,6 +44,8 @@ namespace Kinect_Simon_Says
 
         RuntimeOptions runtimeOptions;
         //SpeechRecognizer speechRecognizer = null;
+
+        DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
 
         #endregion Private State
         #region Window
@@ -345,7 +348,36 @@ namespace Kinect_Simon_Says
         void SkeletonsReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
+            SkeletonData skeleton = (from s in skeletonFrame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
+            SkeletonProcessing kssdata = new SkeletonProcessing(skeleton, .75f);
+            coord[] cData = kssdata.GetSkeletalData();
+            float lhx;
+            float lhy;
 
+            if (cData != null)
+            {
+                //3 second hover and select for a button
+                lhx = cData[(int)KSSJoint.lhand].x;
+                lhy = cData[(int)KSSJoint.lhand].y;
+                kinectvalues.Text = "Left Hand X: " + lhx.ToString() + " Left Hand Y:" + lhy.ToString() + "DateTime: " + ButtonSelectTime.TimeOfDay.ToString();
+                if (lhx > 50 && lhx < 115 &&
+                    lhy > 451 && lhy < 518)
+                {
+                    if (ButtonSelectTime.Year == 1976)
+                    {
+                        ButtonSelectTime = DateTime.Now;
+                        ButtonSelectTime = ButtonSelectTime.AddSeconds(3.0);
+                    }
+                    else if (DateTime.Now.TimeOfDay > ButtonSelectTime.TimeOfDay)
+                        test.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                }
+                else
+                    ButtonSelectTime = new DateTime(1976, 11, 25);
+
+                SetEllipsePosition(headEllipse, cData[(int)KSSJoint.head]);
+                SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
+                SetEllipsePosition(leftEllipse, cData[(int)KSSJoint.lhand]);
+            }
             //KinectSDK TODO: This nullcheck shouldn't be required. 
             //Unfortunately, this version of the Kinect Runtime will continue to fire some skeletonFrameReady events after the Kinect USB is unplugged.
             if (skeletonFrame == null)
@@ -353,6 +385,12 @@ namespace Kinect_Simon_Says
                 return;
             }
         }
+        private void SetEllipsePosition(FrameworkElement ellipse, coord joint)
+        {
+            Canvas.SetLeft(ellipse, joint.x);
+            Canvas.SetTop(ellipse, joint.y);
+        }
+
         ////#region Kinect Skeleton processing
         ////void SkeletonsReady(object sender, SkeletonFrameReadyEventArgs e)
         ////{
@@ -573,6 +611,10 @@ namespace Kinect_Simon_Says
             //CheckPlayers();
         }
         #endregion GameTimer/Thread
+        private void test_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 
     }
 }
