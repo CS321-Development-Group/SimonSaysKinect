@@ -292,7 +292,6 @@ namespace Kinect_Simon_Says
 
     public class Game
     {
-
         public enum GameMode
         {
             Off = 0,
@@ -319,7 +318,6 @@ namespace Kinect_Simon_Says
             sceneRect.X = sceneRect.Y = 0;
             sceneRect.Width = sceneRect.Height = 100;
         }
-
 
         public void SetFramerate(double actualFramerate)
         {

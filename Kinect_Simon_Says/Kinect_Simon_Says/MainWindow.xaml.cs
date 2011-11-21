@@ -81,19 +81,7 @@ namespace Kinect_Simon_Says
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             playfield.ClipToBounds = true;
-           
-            game = new Game(targetFramerate, NumIntraFrames);
-            game.SetGameMode(Game.GameMode.Solo);
-
-            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 110, 130);
-
-            UpdatePlayfieldSize();
-
-            KinectStart();
-            Win32Timer.timeBeginPeriod(TimerResolution);
-            var gameThread = new Thread(GameThread);
-            gameThread.SetApartmentState(ApartmentState.STA);
-            gameThread.Start();
+            
         }
         /// <summary>
         /// Event Handler that is triggerd when the MainWindow is Closing
@@ -612,6 +600,37 @@ namespace Kinect_Simon_Says
         }
         #endregion GameTimer/Thread
         private void test_Click(object sender, RoutedEventArgs e)
+        {
+            startGameButton.Visibility = Visibility.Visible;
+            startGameButton.Content = "Resume Game";
+            startGameButton.FontSize = 14;
+            exitGameButton.Visibility = Visibility.Visible;
+            leaderboardButton.Visibility = Visibility.Visible;
+            test.Visibility = Visibility.Hidden;
+        }
+
+        private void startGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            startGameButton.Visibility = Visibility.Hidden;
+            exitGameButton.Visibility = Visibility.Hidden;
+            leaderboardButton.Visibility = Visibility.Hidden;
+            test.Visibility = Visibility.Visible;
+
+            game = new Game(targetFramerate, NumIntraFrames);
+            game.SetGameMode(Game.GameMode.Solo);
+
+            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
+
+            UpdatePlayfieldSize();
+
+            KinectStart();
+            Win32Timer.timeBeginPeriod(TimerResolution);
+            var gameThread = new Thread(GameThread);
+            gameThread.SetApartmentState(ApartmentState.STA);
+            gameThread.Start();
+        }
+
+        private void exitGameButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

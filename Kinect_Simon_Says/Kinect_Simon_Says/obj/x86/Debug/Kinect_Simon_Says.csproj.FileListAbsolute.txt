@@ -30,3 +30,19 @@ D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kin
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe.config
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.pdb
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.baml
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\App.g.cs
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_MarkupCompile.cache
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.g.resources
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Aaron Rench\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
