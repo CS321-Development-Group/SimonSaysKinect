@@ -1,4 +1,5 @@
 SimonSaysKinect/ipch
 SimonSaysKinect/Debug
 SimonSaysKinect/*.~vsd
+*.~vsd
 SimonSaysKinect/Kinect_Simon_Says.suo

@@ -14,3 +14,19 @@ C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Sim
 C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
 C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
 C:\Users\user\Documents\Visual Studio 2010\Projects\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe.config
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.pdb
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.baml
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.g.cs
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\App.g.cs
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_MarkupCompile.cache
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.g.resources
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
