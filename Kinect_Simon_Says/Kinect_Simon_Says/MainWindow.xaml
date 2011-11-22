@@ -20,7 +20,7 @@
             <Ellipse Canvas.Left="0" Canvas.Top="1" Height="10" Stroke="Black" Fill="Orange" Width="10" Name="headEllipse"/>
             <Ellipse Canvas.Left="50" Canvas.Top="0" Height="10" Stroke="Black" Fill="Blue"  Width="10" Name="rightEllipse"/>
             <Ellipse Canvas.Left="100" Canvas.Top="0" Height="10" Stroke="Black" Fill="Green"  Width="10" Name="leftEllipse"/>
-            <Button Name="test" Canvas.Left="50" Canvas.Top="451" Height="67" Width="67" Click="test_Click" Content="Pause" Visibility="Hidden" />
+            <Button Name="pauseGameButton" Canvas.Left="50" Canvas.Top="451" Height="67" Width="67" Click="pauseGameButton_Click" Content="Pause" Visibility="Hidden" />
             <TextBox Name="kinectvalues" Canvas.Right="0" Canvas.Bottom="0" Height="60" Width="199" FontSize="10" Canvas.Left="Auto" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" />
             <Button Canvas.Left="324" Canvas.Top="34" Content="Start Game" Height="111" Name="startGameButton" Width="111" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Click="startGameButton_Click" FontSize="16" FontWeight="Bold" />
             <Button Canvas.Left="143" Canvas.Top="63" Content="Exit Game" Height="111" Name="exitGameButton" Width="111" Click="exitGameButton_Click" FontSize="18" />

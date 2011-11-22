@@ -102,7 +102,10 @@ namespace Kinect_Simon_Says
         /// <param name="e"></param>
         private void Window_Closed(object sender, EventArgs e)
         {
-            KinectStop();
+            //KinectStop();
+            if (_Kinect != null)
+                UninitializeKinectServices(this._Kinect);
+            Application.Current.Shutdown();
         }
         #endregion Window
         /// <summary>
@@ -307,10 +310,10 @@ namespace Kinect_Simon_Says
             }
             set
             {
-                if (_Kinect != null)
-                {
-                    UninitializeKinectServices(_Kinect);
-                }
+                //if (_Kinect != null)
+                //{
+                //    UninitializeKinectServices(_Kinect);
+                //}
                 _Kinect = value;
                 if (_Kinect != null)
                 {
@@ -357,7 +360,7 @@ namespace Kinect_Simon_Says
                         ButtonSelectTime = ButtonSelectTime.AddSeconds(3.0);
                     }
                     else if (DateTime.Now.TimeOfDay > ButtonSelectTime.TimeOfDay)
-                        test.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                        pauseGameButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 }
                 else
                     ButtonSelectTime = new DateTime(1976, 11, 25);
@@ -599,14 +602,14 @@ namespace Kinect_Simon_Says
             //CheckPlayers();
         }
         #endregion GameTimer/Thread
-        private void test_Click(object sender, RoutedEventArgs e)
+        private void pauseGameButton_Click(object sender, RoutedEventArgs e)
         {
             startGameButton.Visibility = Visibility.Visible;
             startGameButton.Content = "Resume Game";
             startGameButton.FontSize = 14;
             exitGameButton.Visibility = Visibility.Visible;
             leaderboardButton.Visibility = Visibility.Visible;
-            test.Visibility = Visibility.Hidden;
+            pauseGameButton.Visibility = Visibility.Hidden;
         }
 
         private void startGameButton_Click(object sender, RoutedEventArgs e)
@@ -614,7 +617,7 @@ namespace Kinect_Simon_Says
             startGameButton.Visibility = Visibility.Hidden;
             exitGameButton.Visibility = Visibility.Hidden;
             leaderboardButton.Visibility = Visibility.Hidden;
-            test.Visibility = Visibility.Visible;
+            pauseGameButton.Visibility = Visibility.Visible;
 
             game = new Game(targetFramerate, NumIntraFrames);
             game.SetGameMode(Game.GameMode.Solo);

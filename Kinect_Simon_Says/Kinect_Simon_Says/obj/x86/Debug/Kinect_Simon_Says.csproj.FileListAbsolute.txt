@@ -62,3 +62,19 @@ F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinec
 F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
 F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
 F:\cs321\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe.config
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.exe
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.pdb
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.exe
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Kinect_Simon_Says.pdb
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.pdb
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.baml
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\MainWindow.g.cs
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\App.g.cs
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_MarkupCompile.cache
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.g.resources
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
