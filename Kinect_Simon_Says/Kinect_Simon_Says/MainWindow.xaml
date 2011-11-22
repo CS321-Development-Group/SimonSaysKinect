@@ -25,6 +25,7 @@
             <Button Canvas.Left="324" Canvas.Top="34" Content="Start Game" Height="111" Name="startGameButton" Width="111" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Click="startGameButton_Click" FontSize="16" FontWeight="Bold" />
             <Button Canvas.Left="143" Canvas.Top="63" Content="Exit Game" Height="111" Name="exitGameButton" Width="111" Click="exitGameButton_Click" FontSize="18" />
             <Button Canvas.Left="506" Canvas.Top="63" Content="Leaderboards" Height="111" Name="leaderboardButton" Width="111" FontSize="16" />
+            <Button Canvas.Left="356" Canvas.Top="458" Content="CreatePose" Height="23" Name="CreatePose" Width="75" Click="CreatePose_Click" />
         </Canvas>
 
         <!--kt:KinectColorViewer x:Name="kinectViewer" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" /-->

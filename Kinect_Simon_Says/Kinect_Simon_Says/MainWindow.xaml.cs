@@ -46,6 +46,8 @@ namespace Kinect_Simon_Says
         //SpeechRecognizer speechRecognizer = null;
 
         DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
+        Pose kinectPose = new Pose();
+        SkeletonProcessing kinectPlayerSkeleton;
 
         #endregion Private State
         #region Window
@@ -55,6 +57,7 @@ namespace Kinect_Simon_Says
         public MainWindow()
         {
             InitializeComponent();
+
             //RestoreWindowState();
         }
         /// <summary>
@@ -340,13 +343,19 @@ namespace Kinect_Simon_Says
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
             SkeletonData skeleton = (from s in skeletonFrame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
-            SkeletonProcessing kssdata = new SkeletonProcessing(skeleton, .75f);
-            coord[] cData = kssdata.GetSkeletalData();
+            if (kinectPlayerSkeleton == null)
+                kinectPlayerSkeleton = new SkeletonProcessing(skeleton, 1f);
+            else
+                kinectPlayerSkeleton.SetSkeletonData(skeleton);
+
+            coord[] cData = kinectPlayerSkeleton.GetSkeletalData();
             float lhx;
             float lhy;
 
             if (cData != null)
             {
+                if (kinectPose.isValid(cData,10))
+                    this.Close();
                 //3 second hover and select for a button
                 lhx = cData[(int)KSSJoint.lhand].x;
                 lhy = cData[(int)KSSJoint.lhand].y;
@@ -364,7 +373,6 @@ namespace Kinect_Simon_Says
                 }
                 else
                     ButtonSelectTime = new DateTime(1976, 11, 25);
-
                 SetEllipsePosition(headEllipse, cData[(int)KSSJoint.head]);
                 SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
                 SetEllipsePosition(leftEllipse, cData[(int)KSSJoint.lhand]);
@@ -625,6 +633,7 @@ namespace Kinect_Simon_Says
             poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
 
             UpdatePlayfieldSize();
+            kinectPose.GetNewPose();
 
             KinectStart();
             Win32Timer.timeBeginPeriod(TimerResolution);
@@ -636,6 +645,13 @@ namespace Kinect_Simon_Says
         private void exitGameButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void CreatePose_Click(object sender, RoutedEventArgs e)
+        {
+            //coord[] test = kinectPlayerSkeleton.GetSkeletalData();
+            //kinectPose.RecordNewPose(test);
+            kinectPose.GetNewPose();
         }
 
     }

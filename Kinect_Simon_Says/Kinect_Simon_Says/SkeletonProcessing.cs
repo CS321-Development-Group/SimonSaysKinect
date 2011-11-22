@@ -50,6 +50,15 @@ namespace Kinect_Simon_Says
         private SkeletonData skeleton;
         private coord[] coords;
 
+        public SkeletonProcessing()
+        {
+            screenheight = Height;
+            screenwidth = Width;
+            scale = 1f;
+            coords = new coord[11];
+            //skeleton = null;
+        }
+
         public SkeletonProcessing(SkeletonData _skeleton, float _scale)
         {
             skeleton = _skeleton;
@@ -57,6 +66,11 @@ namespace Kinect_Simon_Says
             screenwidth = Width;
             scale = _scale;
             coords = new coord[11];
+        }
+
+        public void SetSkeletonData(SkeletonData _skeleton)
+        {
+            skeleton = _skeleton;
         }
 
         private void Update()
