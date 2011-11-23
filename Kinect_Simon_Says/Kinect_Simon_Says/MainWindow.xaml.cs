@@ -354,7 +354,8 @@ namespace Kinect_Simon_Says
 
             if (cData != null)
             {
-                if (kinectPose.isValid(cData,10))
+                kinectPose.drawPoses(this.SimonPose.Children, kinectPose.GetSimon());
+                if (kinectPose.isValid(cData, 10))
                     this.Close();
                 //3 second hover and select for a button
                 lhx = cData[(int)KSSJoint.lhand].x;
@@ -373,15 +374,13 @@ namespace Kinect_Simon_Says
                 }
                 else
                     ButtonSelectTime = new DateTime(1976, 11, 25);
-                SetEllipsePosition(headEllipse, cData[(int)KSSJoint.head]);
-                SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
-                SetEllipsePosition(leftEllipse, cData[(int)KSSJoint.lhand]);
-            }
-            //KinectSDK TODO: This nullcheck shouldn't be required. 
-            //Unfortunately, this version of the Kinect Runtime will continue to fire some skeletonFrameReady events after the Kinect USB is unplugged.
-            if (skeletonFrame == null)
-            {
-                return;
+                if (cData[(int)KSSJoint.head].x > 0)
+                {
+                    kinectPose.drawPoses(this.PlayerPose.Children, kinectPose.GetPlayer());
+                    SetEllipsePosition(headEllipse, cData[(int)KSSJoint.head]);
+                    SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
+                    SetEllipsePosition(leftEllipse, cData[(int)KSSJoint.lhand]);
+                }
             }
         }
         private void SetEllipsePosition(FrameworkElement ellipse, coord joint)
@@ -649,9 +648,8 @@ namespace Kinect_Simon_Says
 
         private void CreatePose_Click(object sender, RoutedEventArgs e)
         {
-            //coord[] test = kinectPlayerSkeleton.GetSkeletalData();
-            //kinectPose.RecordNewPose(test);
-            kinectPose.GetNewPose();
+            coord[] test = kinectPlayerSkeleton.GetSkeletalData();
+            kinectPose.RecordNewPose(test);
         }
 
     }

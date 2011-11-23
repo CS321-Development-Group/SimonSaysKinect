@@ -27,6 +27,10 @@
             <Button Canvas.Left="506" Canvas.Top="63" Content="Leaderboards" Height="111" Name="leaderboardButton" Width="111" FontSize="16" />
             <Button Canvas.Left="356" Canvas.Top="458" Content="CreatePose" Height="23" Name="CreatePose" Width="75" Click="CreatePose_Click" />
         </Canvas>
+        <Canvas Name="SkeletonImages">
+            <Canvas Name="SimonPose" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
+            <Canvas Name="PlayerPose" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
+        </Canvas>
 
         <!--kt:KinectColorViewer x:Name="kinectViewer" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" /-->
     </Grid>

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 //using XMLReadWrite.Classes;
 
@@ -24,13 +28,13 @@ namespace Kinect_Simon_Says
         private void fillList(string _xmlfile)
         {
             coord[] coords = new coord[11];
-            if(System.IO.File.Exists("PoseData.xml"))
+            if (System.IO.File.Exists("PoseData.xml"))
             {
                 XmlNodeList xmlnodes;
                 XmlDocument xmldoc = new XmlDocument();
                 xmldoc.Load("PoseData.xml");
                 xmlnodes = xmldoc.SelectNodes("//Positions/Pose");
-                foreach(XmlNode node in xmlnodes)
+                foreach (XmlNode node in xmlnodes)
                 {
                     fillCoords(ref coords, KSSJoint.head, "head", node);
                     fillCoords(ref coords, KSSJoint.shoulder, "shoulder", node);
@@ -51,9 +55,9 @@ namespace Kinect_Simon_Says
         {
             _coords[(int)_joint].x = (float)XmlConvert.ToDecimal(node[nodename]["x"].InnerText);
             _coords[(int)_joint].y = (float)XmlConvert.ToDecimal(node[nodename]["y"].InnerText);
-            _coords[(int)_joint].theta = (float)XmlConvert.ToDecimal(node[nodename]["theta"].InnerText);           
+            _coords[(int)_joint].theta = (float)XmlConvert.ToDecimal(node[nodename]["theta"].InnerText);
         }
-        public bool isValid(coord[] _player,double _variance = 0 )
+        public bool isValid(coord[] _player, double _variance = 0)
         {
             bool retval = true;
             SetPlayer(_player);
@@ -100,7 +104,7 @@ namespace Kinect_Simon_Says
             float shouldery = _coords[(int)KSSJoint.shoulder].y;
             float hipx = _coords[(int)KSSJoint.hip].x;
             float hipy = _coords[(int)KSSJoint.hip].y;
-            
+
             //upperbody
             _coords[(int)KSSJoint.relbow].theta = CalculateTheta(shoulderx, shouldery, KSSJoint.relbow, ref _coords);
             _coords[(int)KSSJoint.rhand].theta = CalculateTheta(shoulderx, shouldery, KSSJoint.rhand, ref _coords);
@@ -168,6 +172,63 @@ namespace Kinect_Simon_Says
             xmlDoc.DocumentElement.AppendChild(subRoot);
             //save document
             xmlDoc.Save("PoseData.xml");
+        }
+        private Image getImage(coord[] _pose)
+        {
+            Image image = new Image();
+            DrawingImage myDrawingImage = new DrawingImage();
+            DrawingGroup myDrawingGroup = new DrawingGroup();
+            GeometryDrawing myGeometryDrawing = new GeometryDrawing();
+            GeometryGroup myGeometryGroup = new GeometryGroup();
+
+            myGeometryGroup.Children.Add(getLine(KSSJoint.head, KSSJoint.shoulder, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.shoulder, KSSJoint.relbow, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.shoulder, KSSJoint.lelbow, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.relbow, KSSJoint.rhand, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.lelbow, KSSJoint.lhand, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.shoulder, KSSJoint.hip, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.hip, KSSJoint.rknee, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.hip, KSSJoint.lknee, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.rknee, KSSJoint.rfoot, _pose));
+            myGeometryGroup.Children.Add(getLine(KSSJoint.lknee, KSSJoint.lfoot, _pose));
+
+            Pen myPen = new Pen();
+            myGeometryDrawing.Geometry = myGeometryGroup;
+            myPen.Thickness = 10;
+            myPen.LineJoin = PenLineJoin.Round;
+            myPen.EndLineCap = PenLineCap.Round;
+            myPen.StartLineCap = PenLineCap.Round;
+            myPen.Brush = new SolidColorBrush(Colors.Green);
+            myGeometryDrawing.Pen = myPen;
+            myDrawingGroup.Children.Add(myGeometryDrawing);
+            myDrawingImage.Drawing = myDrawingGroup;
+            image.Name = "simonImage";
+            image.Stretch = Stretch.Uniform;
+            image.HorizontalAlignment = HorizontalAlignment.Stretch;
+            image.VerticalAlignment = VerticalAlignment.Stretch;
+            image.MaxHeight = 289;
+            image.MaxWidth = 777;
+            image.Width = 777;
+            image.Source = myDrawingImage;
+
+            return image;
+        }
+        private LineGeometry getLine(KSSJoint _start, KSSJoint _end, coord[] _pose)
+        {
+            return new LineGeometry(new Point(_pose[(int)_start].x, _pose[(int)_start].y), new Point(_pose[(int)_end].x, _pose[(int)_end].y));
+        }
+        public void drawPoses(UIElementCollection _children, coord[] _pose)
+        {
+            _children.Clear();
+            _children.Add(getImage(_pose));
+        }
+        public coord[] GetSimon()
+        {
+            return simon;
+        }
+        public coord[] GetPlayer()
+        {
+            return player;
         }
     }
 }
