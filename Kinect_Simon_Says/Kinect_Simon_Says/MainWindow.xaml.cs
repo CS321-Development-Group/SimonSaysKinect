@@ -48,7 +48,7 @@ namespace Kinect_Simon_Says
         DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
         Pose kinectPose = new Pose();
         SkeletonProcessing kinectPlayerSkeleton;
-
+        HighScores kinectHighScores = new HighScores();
         #endregion Private State
         #region Window
         /// <summary>
@@ -650,6 +650,10 @@ namespace Kinect_Simon_Says
         {
             coord[] test = kinectPlayerSkeleton.GetSkeletalData();
             kinectPose.RecordNewPose(test);
+            //kinectHighScores.addHighScore(12, "blh");
+            //kinectHighScores.addHighScore(15, "br");
+            //kinectHighScores.addHighScore(25, "ar");
+            //kinectHighScores.addHighScore(16, "mlh");
         }
 
     }
