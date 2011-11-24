@@ -32,7 +32,7 @@ namespace Kinect_Simon_Says
         DateTime lastFrameDrawn = DateTime.MinValue;
         DateTime predNextFrame = DateTime.MinValue;
         double actualFrameTime = 0;
-
+        PauseButton MyPauseButton;
         Game game = null;
         // Player(s) placement in scene (z collapsed):
         Rect playerBounds;
@@ -84,7 +84,7 @@ namespace Kinect_Simon_Says
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             playfield.ClipToBounds = true;
-            
+            MyPauseButton = new PauseButton(60, 50, 50, 4, Brushes.Black, Brushes.DarkGray);
         }
         /// <summary>
         /// Event Handler that is triggerd when the MainWindow is Closing
@@ -621,6 +621,8 @@ namespace Kinect_Simon_Says
 
         private void startGameButton_Click(object sender, RoutedEventArgs e)
         {
+            MyPauseButton.Draw(HUD.Children);
+
             startGameButton.Visibility = Visibility.Hidden;
             exitGameButton.Visibility = Visibility.Hidden;
             leaderboardButton.Visibility = Visibility.Hidden;
