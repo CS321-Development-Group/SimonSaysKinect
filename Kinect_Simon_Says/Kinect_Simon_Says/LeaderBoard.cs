@@ -140,7 +140,7 @@ namespace Kinect_Simon_Says
         }
         public void fillLeaderBoard(List<highscore> _highscores)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10 && i < _highscores.Count; i++)
             {
                 LBList[i].lbName.Text = _highscores[i].initials;
                 LBList[i].lbScore.Text = _highscores[i].score.ToString();

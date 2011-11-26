@@ -94,3 +94,8 @@ C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\obj\
 C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says.Properties.Resources.resources
 C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_Content.g.cs
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\GameOver.wav
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonDoesnt.wav
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonSays.wav
+D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\Welcome.wav

@@ -51,7 +51,8 @@ namespace Kinect_Simon_Says
         HighScores kinectHighScores;
         Menu mainMenu;
         LeaderBoard kssLeaderBoard;
-        
+        MediaPlayer sound = new MediaPlayer();
+
         #endregion Private State
         #region Window
         /// <summary>
@@ -91,6 +92,7 @@ namespace Kinect_Simon_Says
             MyPauseButton.Draw(PauseButtonCanvas.Children);
             poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
             PauseButtonCanvas.Visibility = Visibility.Hidden;
+            sound.Open(new Uri(".\\audio\\Welcome.wav", UriKind.RelativeOrAbsolute));
 
             game = new Game(targetFramerate, NumIntraFrames);
             game.SetGameMode(Game.GameMode.Solo);
@@ -107,11 +109,13 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Start"), MenuButton.Center);
             mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
             mainMenu.draw();
+  
+            //metest.Source = new Uri("/Welcome.wav", UriKind.Relative);
 
             kinectHighScores = new HighScores();
             kssLeaderBoard = new LeaderBoard();
             kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
-
+            sound.Play();
         }
         /// <summary>
         /// Event Handler that is triggerd when the MainWindow is Closing
@@ -575,9 +579,9 @@ namespace Kinect_Simon_Says
             runningGameThread = true;
             predNextFrame = DateTime.Now;
             actualFrameTime = 1000.0 / targetFramerate;
-
             // Try to dispatch at as constant of a framerate as possible by sleeping just enough since
             // the last time we dispatched.
+
             while (runningGameThread)
             {
                 // Calculate average framerate.  
@@ -665,6 +669,7 @@ namespace Kinect_Simon_Says
                     MyPauseButton.timer = MyPauseButton.timer - 1;
                 if (MyPauseButton.timer == 100)
                 {
+                    poseTimer.stopTimer();
                     mainMenu.unhideMenu();
                     MyPauseButton.timer = 0;
                     PauseButtonCanvas.Visibility = Visibility.Hidden;

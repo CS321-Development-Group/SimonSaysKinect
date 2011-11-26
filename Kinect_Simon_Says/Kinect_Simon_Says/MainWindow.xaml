@@ -4,7 +4,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="600" Width="800" Closed="Window_Closed" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Name="grid">
-        <Canvas Margin="1" Name="playfield" SizeChanged="Playfield_SizeChanged">
+        <MediaElement Name="metest" Source=".\Audio\Welcome.wav" LoadedBehavior="Manual" UnloadedBehavior="Manual" />
+            <Canvas Margin="1" Name="playfield" SizeChanged="Playfield_SizeChanged">
             <Canvas.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#D9040833" Offset="0.238" />
@@ -23,7 +24,8 @@
         </Canvas>
         <Canvas Name="SkeletonImages">
             <Canvas Name="SimonPose" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
-            <Canvas Name="PlayerPose" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
+            <Canvas Name="PlayerPose" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163">
+            </Canvas>
         </Canvas>
 
         <!--kt:KinectColorViewer x:Name="kinectViewer" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" /-->

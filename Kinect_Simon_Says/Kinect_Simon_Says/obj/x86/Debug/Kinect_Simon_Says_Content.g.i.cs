@@ -8,6 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("posedata.xml")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("audio/gameover.wav")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("audio/simondoesnt.wav")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("audio/simonsays.wav")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("audio/welcome.wav")]
 
 
