@@ -11,6 +11,8 @@ namespace Kinect_Simon_Says
 {
     class CircleTimer: Shape
     {
+        bool timeractive;
+
         public CircleTimer(double XCenter, double YCenter, double outerRadius, double innerRadius)
         {
             CenterX = XCenter;
@@ -21,6 +23,7 @@ namespace Kinect_Simon_Says
             InnerRadius = innerRadius;
             Stroke = System.Windows.Media.Brushes.Black;
             Fill = System.Windows.Media.Brushes.Azure;
+            timeractive = false;
         }
         #region dependency properties
 
@@ -117,7 +120,19 @@ namespace Kinect_Simon_Says
              set { SetValue(CenterYProperty, value); }
         }
         #endregion
+        public bool isTimerActive()
+        {
+            return timeractive;
+        }
 
+        public void startTimer()
+        {
+            timeractive = true;
+        }
+        public void stopTimer()
+        {
+            timeractive = false;
+        }
         protected override Geometry DefiningGeometry
         {
             get

@@ -45,10 +45,13 @@ namespace Kinect_Simon_Says
         RuntimeOptions runtimeOptions;
         //SpeechRecognizer speechRecognizer = null;
 
-        DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
+        //DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
         Pose kinectPose = new Pose();
         SkeletonProcessing kinectPlayerSkeleton;
         HighScores kinectHighScores = new HighScores();
+        Menu mainMenu;
+        Canvas LeaderBoardCanvas = new Canvas();
+
         #endregion Private State
         #region Window
         /// <summary>
@@ -84,7 +87,29 @@ namespace Kinect_Simon_Says
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             playfield.ClipToBounds = true;
-            MyPauseButton = new PauseButton(60, 50, 50, 4, Brushes.Black, Brushes.DarkGray);
+            MyPauseButton = new PauseButton(80, 50, 50, 10, Brushes.Black, Brushes.DarkGray);
+            MyPauseButton.Draw(PauseButtonCanvas.Children);
+            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
+            PauseButtonCanvas.Visibility = Visibility.Hidden;
+
+            game = new Game(targetFramerate, NumIntraFrames);
+            game.SetGameMode(Game.GameMode.Solo);
+            UpdatePlayfieldSize();
+            kinectPose.GetNewPose();
+            KinectStart();
+            Win32Timer.timeBeginPeriod(TimerResolution);
+            var gameThread = new Thread(GameThread);
+            gameThread.SetApartmentState(ApartmentState.STA);
+            gameThread.Start();
+
+            mainMenu = new Menu(grid.Children, "mainMenu");
+            mainMenu.addButton(new Button("Exit"), MenuButton.LeftCenter);
+            mainMenu.addButton(new Button("Start"), MenuButton.Center);
+            mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
+            mainMenu.draw();
+
+            //Create Leader board
+            //LeaderBoardCanvas.Children.Add(new RectangleGeometry
         }
         /// <summary>
         /// Event Handler that is triggerd when the MainWindow is Closing
@@ -349,8 +374,6 @@ namespace Kinect_Simon_Says
                 kinectPlayerSkeleton.SetSkeletonData(skeleton);
 
             coord[] cData = kinectPlayerSkeleton.GetSkeletalData();
-            float lhx;
-            float lhy;
 
             if (cData != null)
             {
@@ -358,28 +381,45 @@ namespace Kinect_Simon_Says
                 if (kinectPose.isValid(cData, 10))
                     this.Close();
                 //3 second hover and select for a button
-                lhx = cData[(int)KSSJoint.lhand].x;
-                lhy = cData[(int)KSSJoint.lhand].y;
-                kinectvalues.Text = "Left Hand X: " + lhx.ToString() + " Left Hand Y:" + lhy.ToString() + "DateTime: " + ButtonSelectTime.TimeOfDay.ToString();
-                if (lhx > 50 && lhx < 115 &&
-                    lhy > 451 && lhy < 518)
-                {
-                    if (ButtonSelectTime.Year == 1976)
-                    {
-                        ButtonSelectTime = DateTime.Now;
-                        ButtonSelectTime = ButtonSelectTime.AddSeconds(3.0);
-                    }
-                    else if (DateTime.Now.TimeOfDay > ButtonSelectTime.TimeOfDay)
-                        pauseGameButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                }
-                else
-                    ButtonSelectTime = new DateTime(1976, 11, 25);
                 if (cData[(int)KSSJoint.head].x > 0)
                 {
                     kinectPose.drawPoses(this.PlayerPose.Children, kinectPose.GetPlayer());
-                    SetEllipsePosition(headEllipse, cData[(int)KSSJoint.head]);
                     SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
-                    SetEllipsePosition(leftEllipse, cData[(int)KSSJoint.lhand]);
+                }
+            }
+
+            Point currMouse = new Point(cData[(int)KSSJoint.rhand].x,cData[(int)KSSJoint.rhand].y);
+            Point pntPause;
+            MenuButton button = mainMenu.buttonPushed(currMouse, grid);
+            switch (button)
+            {
+                case MenuButton.LeftCenter:
+                    this.Close();
+                    break;
+                case MenuButton.Center:
+                    mainMenu.hideMenu();
+                    PauseButtonCanvas.Visibility = Visibility.Visible;
+                    poseTimer.startTimer();
+                    break;
+            }
+            if (mainMenu.hiddenStatus() == "hiding")
+                mainMenu.hideMenu();
+            else if (mainMenu.hiddenStatus() == "unhiding")
+                mainMenu.unhideMenu();
+            if (PauseButtonCanvas.IsVisible)
+            {
+                pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
+                if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
+                {
+                    MyPauseButton.timer = MyPauseButton.timer + 1;
+                }
+                else if (MyPauseButton.timer > 0)
+                    MyPauseButton.timer = MyPauseButton.timer - 1;
+                if (MyPauseButton.timer == 100)
+                {
+                    mainMenu.unhideMenu();
+                    MyPauseButton.timer = 0;
+                    PauseButtonCanvas.Visibility = Visibility.Hidden;
                 }
             }
         }
@@ -588,18 +628,61 @@ namespace Kinect_Simon_Says
                 game.AdvanceFrame();
             }
             //// Draw new Wpf scene by adding all objects to canvas
+
+            // Testing hover over buttons to click
+            Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
+            Point pntPause;
+            if (currMouse.Y <150)
+            {
+                MenuButton button = mainMenu.buttonPushed(currMouse, grid);
+                switch (button)
+                {
+                    case MenuButton.LeftCenter:
+                        this.Close();
+                        break;
+                    case MenuButton.Center:
+                        mainMenu.hideMenu();
+                        PauseButtonCanvas.Visibility = Visibility.Visible;
+                        poseTimer.startTimer();
+                        break;
+                }
+                if (mainMenu.hiddenStatus() == "hiding")
+                    mainMenu.hideMenu();
+                else if (mainMenu.hiddenStatus() == "unhiding")
+                    mainMenu.unhideMenu();
+                if (PauseButtonCanvas.IsVisible)
+                {
+                    pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
+                    if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
+                    {
+                        MyPauseButton.timer = MyPauseButton.timer + 1;
+                    }
+                    else if (MyPauseButton.timer > 0)
+                        MyPauseButton.timer = MyPauseButton.timer - 1;
+                    if (MyPauseButton.timer == 100)
+                    {
+                        mainMenu.unhideMenu();
+                        MyPauseButton.timer = 0;
+                        PauseButtonCanvas.Visibility = Visibility.Hidden;
+                    }
+                }
+            }
+            // End hover testing
             playfield.Children.Clear();
             HUD.Children.Clear();
-            if (poseTimer.WedgeAngle < 360)
+            if (poseTimer.isTimerActive())
             {
-                poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
+                if (poseTimer.WedgeAngle < 360)
+                {
+                    poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
+                }
+                else
+                {
+                    poseTimer.WedgeAngle = 0;
+                    //ValidatePose function call here
+                }
+                poseTimer.Draw(HUD.Children);
             }
-            else
-            {
-                poseTimer.WedgeAngle = 0;
-                //ValidatePose function call here
-            }
-            poseTimer.Draw(HUD.Children);
             game.DrawFrame(playfield.Children);
             foreach (var player in players)
                 player.Value.Draw(playfield.Children);
@@ -609,54 +692,40 @@ namespace Kinect_Simon_Says
             //CheckPlayers();
         }
         #endregion GameTimer/Thread
-        private void pauseGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            startGameButton.Visibility = Visibility.Visible;
-            startGameButton.Content = "Resume Game";
-            startGameButton.FontSize = 14;
-            exitGameButton.Visibility = Visibility.Visible;
-            leaderboardButton.Visibility = Visibility.Visible;
-            pauseGameButton.Visibility = Visibility.Hidden;
-        }
+        //private void pauseGameButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    startGameButton.Visibility = Visibility.Visible;
+        //    startGameButton.Content = "Resume Game";
+        //    startGameButton.FontSize = 14;
+        //    //exitGameButton.Visibility = Visibility.Visible;
+        //    leaderboardButton.Visibility = Visibility.Visible;
+        //    pauseGameButton.Visibility = Visibility.Hidden;
+        //}
 
-        private void startGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            MyPauseButton.Draw(HUD.Children);
+        //private void startGameButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    MyPauseButton.Draw(HUD.Children);
 
-            startGameButton.Visibility = Visibility.Hidden;
-            exitGameButton.Visibility = Visibility.Hidden;
-            leaderboardButton.Visibility = Visibility.Hidden;
-            pauseGameButton.Visibility = Visibility.Visible;
+        //    startGameButton.Visibility = Visibility.Hidden;
+        //    //exitGameButton.Visibility = Visibility.Hidden;
+        //    leaderboardButton.Visibility = Visibility.Hidden;
+        //    pauseGameButton.Visibility = Visibility.Visible;
 
-            game = new Game(targetFramerate, NumIntraFrames);
-            game.SetGameMode(Game.GameMode.Solo);
 
-            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
-
-            UpdatePlayfieldSize();
-            kinectPose.GetNewPose();
-
-            KinectStart();
-            Win32Timer.timeBeginPeriod(TimerResolution);
-            var gameThread = new Thread(GameThread);
-            gameThread.SetApartmentState(ApartmentState.STA);
-            gameThread.Start();
-        }
-
-        private void exitGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        //}
 
         private void CreatePose_Click(object sender, RoutedEventArgs e)
         {
-            coord[] test = kinectPlayerSkeleton.GetSkeletalData();
-            kinectPose.RecordNewPose(test);
+            //coord[] test = kinectPlayerSkeleton.GetSkeletalData();
+            //kinectPose.RecordNewPose(test);
             //kinectHighScores.addHighScore(12, "blh");
             //kinectHighScores.addHighScore(15, "br");
             //kinectHighScores.addHighScore(25, "ar");
             //kinectHighScores.addHighScore(16, "mlh");
+            mainMenu.hideMenu();
+
         }
+
 
     }
 }

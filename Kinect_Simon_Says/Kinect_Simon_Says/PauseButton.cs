@@ -19,9 +19,10 @@ namespace Kinect_Simon_Says
         Ellipse ButtonOutline;
         Line LeftPauseLine;
         Line RightPauseLine;
-        
+        public int timer;
         public PauseButton(double radius, double xPos, double yPos, double strokeThickness, Brush LineColor, Brush FillColor )
         {
+            timer = 0;
             Radius = radius;
             Center = new Point(xPos, yPos);
             ButtonOutline = new Ellipse();
@@ -30,6 +31,7 @@ namespace Kinect_Simon_Says
             ButtonOutline.Stroke = LineColor;
             ButtonOutline.StrokeThickness = strokeThickness / 4;
             ButtonOutline.Fill = FillColor;
+            ButtonOutline.Name = "pOutline";
 
             LeftPauseLine = new Line();
             LeftPauseLine.X1 = radius/3;
@@ -38,6 +40,7 @@ namespace Kinect_Simon_Says
             LeftPauseLine.Y2 = (radius*5)/6;
             LeftPauseLine.Stroke = LineColor;
             LeftPauseLine.StrokeThickness = strokeThickness;
+            LeftPauseLine.Name = "lPauseLine";
 
             RightPauseLine = new Line();
             RightPauseLine.X1 = (radius*2) / 3;
@@ -46,7 +49,7 @@ namespace Kinect_Simon_Says
             RightPauseLine.Y2 = (radius * 5) / 6;
             RightPauseLine.Stroke = LineColor;
             RightPauseLine.StrokeThickness = strokeThickness;
-
+            RightPauseLine.Name = "rPauseLine";
         }
         public void Draw(UIElementCollection ele)
         {
