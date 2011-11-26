@@ -77,6 +77,7 @@
     </ApplicationDefinition>
     <Compile Include="CircleTimer.cs" />
     <Compile Include="HighScores.cs" />
+    <Compile Include="LeaderBoard.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="PauseButton.cs" />
     <Compile Include="Player.cs" />

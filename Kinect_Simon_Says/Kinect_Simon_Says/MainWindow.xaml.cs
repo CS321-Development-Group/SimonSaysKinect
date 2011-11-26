@@ -48,10 +48,10 @@ namespace Kinect_Simon_Says
         //DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
         Pose kinectPose = new Pose();
         SkeletonProcessing kinectPlayerSkeleton;
-        HighScores kinectHighScores = new HighScores();
+        HighScores kinectHighScores;
         Menu mainMenu;
-        Canvas LeaderBoardCanvas = new Canvas();
-
+        LeaderBoard kssLeaderBoard;
+        
         #endregion Private State
         #region Window
         /// <summary>
@@ -108,8 +108,10 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
             mainMenu.draw();
 
-            //Create Leader board
-            //LeaderBoardCanvas.Children.Add(new RectangleGeometry
+            kinectHighScores = new HighScores();
+            kssLeaderBoard = new LeaderBoard();
+            kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
+
         }
         /// <summary>
         /// Event Handler that is triggerd when the MainWindow is Closing
@@ -632,39 +634,40 @@ namespace Kinect_Simon_Says
             // Testing hover over buttons to click
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
             Point pntPause;
-            if (currMouse.Y <150)
+            MenuButton button = mainMenu.buttonPushed(currMouse, grid);
+            switch (button)
             {
-                MenuButton button = mainMenu.buttonPushed(currMouse, grid);
-                switch (button)
-                {
-                    case MenuButton.LeftCenter:
-                        this.Close();
-                        break;
-                    case MenuButton.Center:
-                        mainMenu.hideMenu();
-                        PauseButtonCanvas.Visibility = Visibility.Visible;
-                        poseTimer.startTimer();
-                        break;
-                }
-                if (mainMenu.hiddenStatus() == "hiding")
+                case MenuButton.LeftCenter:
+                    this.Close();
+                    break;
+                case MenuButton.Center:
                     mainMenu.hideMenu();
-                else if (mainMenu.hiddenStatus() == "unhiding")
-                    mainMenu.unhideMenu();
-                if (PauseButtonCanvas.IsVisible)
+                    PauseButtonCanvas.Visibility = Visibility.Visible;
+                    poseTimer.startTimer();
+                    break;
+                case MenuButton.RightCenter:
+                    kssLeaderBoard.draw(grid.Children);
+                    kssLeaderBoard.showLeaderBoard();
+                    break;
+            }
+            if (mainMenu.hiddenStatus() == "hiding")
+                mainMenu.hideMenu();
+            else if (mainMenu.hiddenStatus() == "unhiding")
+                mainMenu.unhideMenu();
+            if (PauseButtonCanvas.IsVisible)
+            {
+                pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
+                if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
                 {
-                    pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
-                    if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
-                    {
-                        MyPauseButton.timer = MyPauseButton.timer + 1;
-                    }
-                    else if (MyPauseButton.timer > 0)
-                        MyPauseButton.timer = MyPauseButton.timer - 1;
-                    if (MyPauseButton.timer == 100)
-                    {
-                        mainMenu.unhideMenu();
-                        MyPauseButton.timer = 0;
-                        PauseButtonCanvas.Visibility = Visibility.Hidden;
-                    }
+                    MyPauseButton.timer = MyPauseButton.timer + 1;
+                }
+                else if (MyPauseButton.timer > 0)
+                    MyPauseButton.timer = MyPauseButton.timer - 1;
+                if (MyPauseButton.timer == 100)
+                {
+                    mainMenu.unhideMenu();
+                    MyPauseButton.timer = 0;
+                    PauseButtonCanvas.Visibility = Visibility.Hidden;
                 }
             }
             // End hover testing
