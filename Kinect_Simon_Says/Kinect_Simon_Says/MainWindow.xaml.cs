@@ -26,13 +26,11 @@ namespace Kinect_Simon_Says
         const int NumIntraFrames = 3;
         const double MaxFramerate = 70;
         const double MinFramerate = 15;
-        const int POSE_TIMER_INCREMENT_PER_FRAME = 1;
         Dictionary<int, Player> players = new Dictionary<int, Player>();
 
         DateTime lastFrameDrawn = DateTime.MinValue;
         DateTime predNextFrame = DateTime.MinValue;
         double actualFrameTime = 0;
-        PauseButton MyPauseButton;
         Game game = null;
         // Player(s) placement in scene (z collapsed):
         Rect playerBounds;
@@ -40,7 +38,6 @@ namespace Kinect_Simon_Says
         double targetFramerate = MaxFramerate;
         int frameCount = 0;
         bool runningGameThread = false;
-        CircleTimer poseTimer = null;
 
         RuntimeOptions runtimeOptions;
         //SpeechRecognizer speechRecognizer = null;
@@ -88,15 +85,16 @@ namespace Kinect_Simon_Says
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             playfield.ClipToBounds = true;
-            MyPauseButton = new PauseButton(80, 50, 50, 10, Brushes.Black, Brushes.DarkGray);
-            MyPauseButton.Draw(PauseButtonCanvas.Children);
-            poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
-            PauseButtonCanvas.Visibility = Visibility.Hidden;
+            //MyPauseButton = new PauseButton(80, 50, 50, 10, Brushes.Black, Brushes.DarkGray);
+            //MyPauseButton.Draw(PauseButtonCanvas.Children);
+            //poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
+            //PauseButtonCanvas.Visibility = Visibility.Hidden;
             sound.Open(new Uri(".\\audio\\Welcome.wav", UriKind.RelativeOrAbsolute));
 
-            game = new Game(targetFramerate, NumIntraFrames);
-            game.SetGameMode(Game.GameMode.Solo);
             UpdatePlayfieldSize();
+            game = new Game(targetFramerate, NumIntraFrames, screenRect);
+            game.SetGameMode(Game.GameMode.Off);
+
             kinectPose.GetNewPose();
             KinectStart();
             Win32Timer.timeBeginPeriod(TimerResolution);
@@ -379,174 +377,12 @@ namespace Kinect_Simon_Says
             else
                 kinectPlayerSkeleton.SetSkeletonData(skeleton);
 
-            coord[] cData = kinectPlayerSkeleton.GetSkeletalData();
-
-            if (cData != null)
-            {
-                kinectPose.drawPoses(this.SimonPose.Children, kinectPose.GetSimon());
-                if (kinectPose.isValid(cData, 10))
-                    this.Close();
-                //3 second hover and select for a button
-                if (cData[(int)KSSJoint.head].x > 0)
-                {
-                    kinectPose.drawPoses(this.PlayerPose.Children, kinectPose.GetPlayer());
-                    SetEllipsePosition(rightEllipse, cData[(int)KSSJoint.rhand]);
-                }
-            }
-
-            Point currMouse = new Point(cData[(int)KSSJoint.rhand].x,cData[(int)KSSJoint.rhand].y);
-            Point pntPause;
-            MenuButton button = mainMenu.buttonPushed(currMouse, grid);
-            switch (button)
-            {
-                case MenuButton.LeftCenter:
-                    this.Close();
-                    break;
-                case MenuButton.Center:
-                    mainMenu.hideMenu();
-                    PauseButtonCanvas.Visibility = Visibility.Visible;
-                    poseTimer.startTimer();
-                    break;
-            }
-            if (mainMenu.hiddenStatus() == "hiding")
-                mainMenu.hideMenu();
-            else if (mainMenu.hiddenStatus() == "unhiding")
-                mainMenu.unhideMenu();
-            if (PauseButtonCanvas.IsVisible)
-            {
-                pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
-                if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
-                {
-                    MyPauseButton.timer = MyPauseButton.timer + 1;
-                }
-                else if (MyPauseButton.timer > 0)
-                    MyPauseButton.timer = MyPauseButton.timer - 1;
-                if (MyPauseButton.timer == 100)
-                {
-                    mainMenu.unhideMenu();
-                    MyPauseButton.timer = 0;
-                    PauseButtonCanvas.Visibility = Visibility.Hidden;
-                }
-            }
         }
         private void SetEllipsePosition(FrameworkElement ellipse, coord joint)
         {
             Canvas.SetLeft(ellipse, joint.x);
             Canvas.SetTop(ellipse, joint.y);
         }
-
-        ////#region Kinect Skeleton processing
-        ////void SkeletonsReady(object sender, SkeletonFrameReadyEventArgs e)
-        ////{
-        ////    SkeletonFrame skeletonFrame = e.SkeletonFrame;
-
-        ////    KinectSDK TODO: This nullcheck shouldn't be required. 
-        ////    Unfortunately, this version of the Kinect Runtime will continue to fire some skeletonFrameReady events after the Kinect USB is unplugged.
-        ////    if (skeletonFrame == null)
-        ////    {
-        ////        return;
-        ////    }
-
-        ////    int iSkeletonSlot = 0;
-
-        ////    foreach (SkeletonData data in skeletonFrame.Skeletons)
-        ////    {
-        ////        if (SkeletonTrackingState.Tracked == data.TrackingState)
-        ////        {
-        ////            Player player;
-        ////            if (players.ContainsKey(iSkeletonSlot))
-        ////            {
-        ////                player = players[iSkeletonSlot];
-        ////            }
-        ////            else
-        ////            {
-        ////                player = new Player(iSkeletonSlot);
-        ////                player.setBounds(playerBounds);
-        ////                players.Add(iSkeletonSlot, player);
-        ////            }
-
-        ////            player.lastUpdated = DateTime.Now;
-
-        ////             Update player's bone and joint positions
-        ////            if (data.Joints.Count > 0)
-        ////            {
-        ////                player.isAlive = true;
-
-        ////                 Head, hands, feet (hit testing happens in order here)
-        ////                player.UpdateJointPosition(data.Joints, JointID.Head);
-        ////                player.UpdateJointPosition(data.Joints, JointID.HandLeft);
-        ////                player.UpdateJointPosition(data.Joints, JointID.HandRight);
-        ////                player.UpdateJointPosition(data.Joints, JointID.FootLeft);
-        ////                player.UpdateJointPosition(data.Joints, JointID.FootRight);
-
-        ////                 Hands and arms
-        ////                player.UpdateBonePosition(data.Joints, JointID.HandRight, JointID.WristRight);
-        ////                player.UpdateBonePosition(data.Joints, JointID.WristRight, JointID.ElbowRight);
-        ////                player.UpdateBonePosition(data.Joints, JointID.ElbowRight, JointID.ShoulderRight);
-
-        ////                player.UpdateBonePosition(data.Joints, JointID.HandLeft, JointID.WristLeft);
-        ////                player.UpdateBonePosition(data.Joints, JointID.WristLeft, JointID.ElbowLeft);
-        ////                player.UpdateBonePosition(data.Joints, JointID.ElbowLeft, JointID.ShoulderLeft);
-
-        ////                 Head and Shoulders
-        ////                player.UpdateBonePosition(data.Joints, JointID.ShoulderCenter, JointID.Head);
-        ////                player.UpdateBonePosition(data.Joints, JointID.ShoulderLeft, JointID.ShoulderCenter);
-        ////                player.UpdateBonePosition(data.Joints, JointID.ShoulderCenter, JointID.ShoulderRight);
-
-        ////                 Legs
-        ////                player.UpdateBonePosition(data.Joints, JointID.HipLeft, JointID.KneeLeft);
-        ////                player.UpdateBonePosition(data.Joints, JointID.KneeLeft, JointID.AnkleLeft);
-        ////                player.UpdateBonePosition(data.Joints, JointID.AnkleLeft, JointID.FootLeft);
-
-        ////                player.UpdateBonePosition(data.Joints, JointID.HipRight, JointID.KneeRight);
-        ////                player.UpdateBonePosition(data.Joints, JointID.KneeRight, JointID.AnkleRight);
-        ////                player.UpdateBonePosition(data.Joints, JointID.AnkleRight, JointID.FootRight);
-
-        ////                player.UpdateBonePosition(data.Joints, JointID.HipLeft, JointID.HipCenter);
-        ////                player.UpdateBonePosition(data.Joints, JointID.HipCenter, JointID.HipRight);
-
-        ////                 Spine
-        ////                player.UpdateBonePosition(data.Joints, JointID.HipCenter, JointID.ShoulderCenter);
-        ////            }
-        ////        }
-        ////        iSkeletonSlot++;
-        ////    }
-        ////}
-
-        ////void CheckPlayers()
-        ////{
-        ////    foreach (var player in players)
-        ////    {
-        ////        if (!player.Value.isAlive)
-        ////        {
-        ////            // Player left scene since we aren't tracking it anymore, so remove from dictionary
-        ////            players.Remove(player.Value.getId());
-        ////            break;
-        ////        }
-        ////    }
-
-        ////    // Count alive players
-        ////    int alive = 0;
-        ////    foreach (var player in players)
-        ////    {
-        ////        if (player.Value.isAlive)
-        ////            alive++;
-        ////    }
-        ////    if (alive != playersAlive)
-        ////    {
-        ////        if (alive == 2)
-        ////            fallingThings.SetGameMode(FallingThings.GameMode.TwoPlayer);
-        ////        else if (alive == 1)
-        ////            fallingThings.SetGameMode(FallingThings.GameMode.Solo);
-        ////        else if (alive == 0)
-        ////            fallingThings.SetGameMode(FallingThings.GameMode.Off);
-
-        ////        if ((playersAlive == 0) && (speechRecognizer != null))
-        ////            BannerText.NewBanner(Properties.Resources.Vocabulary, screenRect, true, Color.FromArgb(200, 255, 255, 255));
-
-        ////        playersAlive = alive;
-        ////    }
-        ////}
 
         private void Playfield_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -621,24 +457,33 @@ namespace Kinect_Simon_Says
             // Advance animations, and do hit testing.
             for (int i = 0; i < NumIntraFrames; ++i)
             {
-                //    foreach (var pair in players)
-                //    {
-                //        HitType hit = fallingThings.LookForHits(pair.Value.segments, pair.Value.getId());
-                //        if ((hit & HitType.Squeezed) != 0)
-                //            squeezeSound.Play();
-                //        else if ((hit & HitType.Popped) != 0)
-                //            popSound.Play();
-                //        else if ((hit & HitType.Hand) != 0)
-                //            hitSound.Play();
-                //    }
                 game.AdvanceFrame();
             }
             //// Draw new Wpf scene by adding all objects to canvas
 
             // Testing hover over buttons to click
+            coord[] skeletonData = null;
+            if (kinectPlayerSkeleton != null)
+            {
+                skeletonData = kinectPlayerSkeleton.GetSkeletalData();
+                if (skeletonData != null)//consider making this encompass more stuff but for lazy's sake dont do it now
+                {
+                    kinectPose.drawPose(SimonPose.Children, kinectPose.GetSimon());
+                    //3 second hover and select for a button
+                    if (skeletonData[(int)KSSJoint.head].x > 0)//should this be here? skeleton data is already not null... so what if the head is 0
+                    {
+                        kinectPose.drawPose(this.PlayerPose.Children, kinectPose.GetPlayer());
+                        SetEllipsePosition(rightEllipse, skeletonData[(int)KSSJoint.rhand]);
+                    }
+                }
+
+                Point currHand = new Point(skeletonData[(int)KSSJoint.rhand].x, skeletonData[(int)KSSJoint.rhand].y);
+            }
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
-            Point pntPause;
-            MenuButton button = mainMenu.buttonPushed(currMouse, grid);
+
+            Point currSelectionPosition = currMouse;
+
+            MenuButton button = mainMenu.buttonPushed(currSelectionPosition, grid);
             switch (button)
             {
                 case MenuButton.LeftCenter:
@@ -646,8 +491,7 @@ namespace Kinect_Simon_Says
                     break;
                 case MenuButton.Center:
                     mainMenu.hideMenu();
-                    PauseButtonCanvas.Visibility = Visibility.Visible;
-                    poseTimer.startTimer();
+                    game.SetGameMode(Game.GameMode.Playing);
                     break;
                 case MenuButton.RightCenter:
                     kssLeaderBoard.draw(grid.Children);
@@ -658,39 +502,14 @@ namespace Kinect_Simon_Says
                 mainMenu.hideMenu();
             else if (mainMenu.hiddenStatus() == "unhiding")
                 mainMenu.unhideMenu();
-            if (PauseButtonCanvas.IsVisible)
+
+            game.checkHovers(currSelectionPosition);
+            if (game.getGameMode() == Game.GameMode.Paused )
             {
-                pntPause = PauseButtonCanvas.TranslatePoint(new Point(50, 50), grid);
-                if (Math.Sqrt(Math.Pow((pntPause.X - currMouse.X), 2) + Math.Pow((pntPause.Y - currMouse.Y), 2)) <= 80)
-                {
-                    MyPauseButton.timer = MyPauseButton.timer + 1;
-                }
-                else if (MyPauseButton.timer > 0)
-                    MyPauseButton.timer = MyPauseButton.timer - 1;
-                if (MyPauseButton.timer == 100)
-                {
-                    poseTimer.stopTimer();
-                    mainMenu.unhideMenu();
-                    MyPauseButton.timer = 0;
-                    PauseButtonCanvas.Visibility = Visibility.Hidden;
-                }
+                mainMenu.unhideMenu();
             }
             // End hover testing
             playfield.Children.Clear();
-            HUD.Children.Clear();
-            if (poseTimer.isTimerActive())
-            {
-                if (poseTimer.WedgeAngle < 360)
-                {
-                    poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
-                }
-                else
-                {
-                    poseTimer.WedgeAngle = 0;
-                    //ValidatePose function call here
-                }
-                poseTimer.Draw(HUD.Children);
-            }
             game.DrawFrame(playfield.Children);
             foreach (var player in players)
                 player.Value.Draw(playfield.Children);

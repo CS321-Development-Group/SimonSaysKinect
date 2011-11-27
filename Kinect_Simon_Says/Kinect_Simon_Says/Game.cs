@@ -295,28 +295,45 @@ namespace Kinect_Simon_Says
         public enum GameMode
         {
             Off = 0,
-            Solo = 1,
-            TwoPlayer = 2
+            Paused = 1,
+            Playing = 2
         }
-        private const double DissolveTime = 0.4;
-        private Rect sceneRect;
-        private Random rnd = new Random();
+        #region Variables
         private double targetFrameRate = 60;
-        private GameMode gameMode = GameMode.Off;
-        private const int STARTING_LIVES = 3;
-        private int livesRemaining = 0;
         private int intraFrames = 1;
         private int frameCount = 0;
-        private Color baseColor = Color.FromRgb(0, 0, 0);
-        private Dictionary<int, int> scores = new Dictionary<int, int>();
-        private DateTime gameStartTime;
 
-        public Game( double framerate, int intraFrames)
+        private GameMode gameMode = GameMode.Off;
+        private Rect sceneRect;
+
+        private CircleTimer poseTimer = null;
+        const double POSE_TIMER_INCREMENT_PER_FRAME = 1;
+        private const double CIRCLE_TIMER_WIDTH = 180;
+        private const double CIRCLE_TIMER_HEIGHT = 200;
+
+        private LivesIndicator Water = null;
+        private const int STARTING_LIVES = 3;
+        private int livesRemaining = 0;
+
+        private PauseButton gamePauseButton = null;
+        private const double PAUSE_BUTTON_RADIUS = 30;
+        
+        private Color baseColor = Color.FromRgb(0, 0, 0);
+        
+        private Dictionary<int, int> scores = new Dictionary<int, int>();
+        
+        private DateTime gameStartTime;
+        #endregion Variables
+
+        public Game( double framerate, int intraFrames, Rect _sceneRect)
         {
             this.intraFrames = intraFrames;
             this.targetFrameRate = framerate * intraFrames;
-            sceneRect.X = sceneRect.Y = 0;
-            sceneRect.Width = sceneRect.Height = 100;
+            sceneRect = _sceneRect;
+            poseTimer = new CircleTimer(sceneRect.Width / 2, sceneRect.Height / 2, CIRCLE_TIMER_WIDTH, CIRCLE_TIMER_HEIGHT);
+            gamePauseButton = new PauseButton(PAUSE_BUTTON_RADIUS, sceneRect.Width / 2, PAUSE_BUTTON_RADIUS + 2);
+            livesRemaining = STARTING_LIVES;
+            Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height / 2, livesRemaining); 
         }
 
         public void SetFramerate(double actualFramerate)
@@ -348,9 +365,14 @@ namespace Kinect_Simon_Says
         public void SetGameMode(GameMode mode)
         {
             gameMode = mode;
-            gameStartTime = DateTime.Now;
-            scores.Clear();
-            scores.Add(1, 2);
+            if (mode == Game.GameMode.Playing)
+            {
+                gameStartTime = DateTime.Now;
+            }
+            if (mode == Game.GameMode.Off)
+            {
+                scores.Clear();
+            }
         }
 
         private void AddToScore(int player, int points, Point center)
@@ -360,17 +382,6 @@ namespace Kinect_Simon_Says
             else
                 scores.Add(player, points);
             FlyingText.NewFlyingText(sceneRect.Width / 300, center, "+" + points);
-        }
-        private Shape makeTimer()
-        {
-            Ellipse circle = new Ellipse();
-            circle.Stroke = System.Windows.Media.Brushes.Black;
-            circle.StrokeThickness = 2;
-            //circle.Fill = System.Windows.Media.Brushes.DarkBlue;
-            circle.Width = 50;
-            circle.Height = 75;
-            return circle;
-
         }
         private Shape makeSimpleShape(int numSides, int skip, double size, double spin, Point center, Brush brush,
             Brush brushStroke, double strokeThickness, double opacity)
@@ -433,74 +444,59 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
-
+        }
+        public void checkHovers(Point MousePos)
+        {
+            if (gamePauseButton.isPressed(MousePos))
+            {
+                gameMode = Game.GameMode.Paused;
+            }
         }
         public void DrawFrame(UIElementCollection children)
         {
             frameCount++;
-
-            //// Draw all shapes in the scene
-            //for (int i = 0; i < things.Count; i++)
-            //{
-            //    Thing thing = things[i];
-            //    if (thing.brush == null)
-            //    {
-            //        thing.brush = new SolidColorBrush(thing.color);
-            //        double factor = 0.4 + ((double)thing.color.R + thing.color.G + thing.color.B) / 1600;
-            //        thing.brush2 = new SolidColorBrush(Color.FromRgb((byte)(255 - (255 - thing.color.R) * factor),
-            //                                                         (byte)(255 - (255 - thing.color.G) * factor),
-            //                                                         (byte)(255 - (255 - thing.color.B) * factor)));
-            //        thing.brushPulse = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            //    }
-
-            //    if (thing.state == ThingState.Bouncing)  // Pulsate edges
-            //    {
-            //        double alpha = (Math.Cos(0.15 * (thing.flashCount++) * thing.hotness) * 0.5 + 0.5);
-
-            //        children.Add(makeSimpleShape(PolyDefs[thing.shape].numSides, PolyDefs[thing.shape].skip,
-            //            thing.size, thing.theta, thing.center, thing.brush,
-            //            thing.brushPulse, thing.size * 0.1, alpha));
-            //        things[i] = thing;
-            //    }
-            //    else
-            //    {
-            //        if (thing.state == ThingState.Dissolving)
-            //            thing.brush.Opacity = 1.0 - thing.dissolve * thing.dissolve;
-
-            //        children.Add(makeSimpleShape(PolyDefs[thing.shape].numSides, PolyDefs[thing.shape].skip,
-            //            thing.size, thing.theta, thing.center, thing.brush,
-            //            (thing.state == ThingState.Dissolving) ? null : thing.brush2, 1, 1));
-            //    }
-            //}
-
-            // Show scores
-            if (scores.Count != 0)
+            if (this.gameMode == Game.GameMode.Playing)
             {
-                int i = 0;
-                foreach (var score in scores)
+                children.Add(gamePauseButton);
+
+                if (poseTimer.WedgeAngle < 360)
                 {
-                    Label label = MakeSimpleLabel("Score: " + score.Value.ToString(),
-                        new Rect((0.02) * sceneRect.Width, 0.02 * sceneRect.Height,
-                                 2 * sceneRect.Width, 2 * sceneRect.Height),
-                        new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)));
-                    label.FontSize = Math.Max(1, Math.Min(sceneRect.Width / 3, sceneRect.Height / 3));
-                    children.Add(label);
-                    i++;
+                    poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
+                }
+                else
+                {
+                    poseTimer.WedgeAngle = 0;
+                    //Validate Pose
+                }
+                children.Add(poseTimer);
+
+                if (scores.Count != 0)
+                {
+                    int i = 0;
+                    foreach (var score in scores)
+                    {
+                        Label label = MakeSimpleLabel("Score: " + score.Value.ToString(),
+                            new Rect(0.02, 0.02, .5 * sceneRect.Width, .5 * sceneRect.Height),
+                            new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)));
+                        label.FontSize = Math.Max(1, Math.Min(sceneRect.Width / 12, sceneRect.Height / 12));
+                        children.Add(label);
+                        i++;
+                    }
                 }
             }
+            else if (this.gameMode == Game.GameMode.Paused)
+            { 
+                
+            }
+            else if (this.gameMode == Game.GameMode.Off)
+            {
 
-            // Show game timer
-                TimeSpan span = DateTime.Now.Subtract(gameStartTime);
+            }
+        }
 
-                string text = span.Minutes.ToString() + ":" + span.Seconds.ToString("00");
-
-                Label timeText = MakeSimpleLabel(text,
-                    new Rect(0.1 * sceneRect.Width, 0.25 * sceneRect.Height, 0.89 * sceneRect.Width, 0.72 * sceneRect.Height),
-                    new SolidColorBrush(Color.FromArgb(160, 255, 255, 255)));
-                timeText.FontSize = Math.Max(1, sceneRect.Height / 4);
-                timeText.HorizontalContentAlignment = HorizontalAlignment.Right;
-                timeText.VerticalContentAlignment = VerticalAlignment.Bottom;
-                children.Add(timeText);
+        public GameMode getGameMode()
+        {
+            return (this.gameMode);
         }
     }
 }

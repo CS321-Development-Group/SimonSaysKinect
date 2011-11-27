@@ -217,7 +217,7 @@ namespace Kinect_Simon_Says
         {
             return new LineGeometry(new Point(_pose[(int)_start].x, _pose[(int)_start].y), new Point(_pose[(int)_end].x, _pose[(int)_end].y));
         }
-        public void drawPoses(UIElementCollection _children, coord[] _pose)
+        public void drawPose(UIElementCollection _children, coord[] _pose)
         {
             _children.Clear();
             _children.Add(getImage(_pose));

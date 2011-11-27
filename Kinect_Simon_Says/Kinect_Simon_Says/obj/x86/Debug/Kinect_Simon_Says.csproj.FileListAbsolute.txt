@@ -99,3 +99,8 @@ D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\G
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonDoesnt.wav
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonSays.wav
 D:\GitData\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\Welcome.wav
+C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\GameOver.wav
+C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonDoesnt.wav
+C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\SimonSays.wav
+C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\Welcome.wav
+C:\Users\user\Desktop\Kinectimals_11\24\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_Content.g.cs

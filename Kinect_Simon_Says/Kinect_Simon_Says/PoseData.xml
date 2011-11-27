@@ -1,57 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0"?>
 <Positions>
-  <Pose name="pose1">
+  <Pose>
     <head>
-      <x></x>
-      <y></y>
+      <x>375.0539</x>
+      <y>86.49439</y>
+      <theta>0</theta>
     </head>
     <shoulder>
-      <x></x>
-      <y></y>
+      <x>377.8418</x>
+      <y>138.795</y>
+      <theta>0</theta>
     </shoulder>
     <hip>
-      <x></x>
-      <y></y>
+      <x>376.2616</x>
+      <y>262.9741</y>
+      <theta>0</theta>
     </hip>
     <relbow>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>481.4966</x>
+      <y>259.2599</y>
+      <theta>-0.860262513160706</theta>
     </relbow>
     <rhand>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>503.5215</x>
+      <y>362.5935</y>
+      <theta>-1.05910956859589</theta>
     </rhand>
     <lelbow>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>235.0605</x>
+      <y>108.8582</y>
+      <theta>2.93491744995117</theta>
     </lelbow>
     <lhand>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>129.333</x>
+      <y>41.52989</y>
+      <theta>2.76852631568909</theta>
     </lhand>
     <rknee>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>428.2502</x>
+      <y>425.1543</y>
+      <theta>-1.26058483123779</theta>
     </rknee>
     <rfoot>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>423.5635</x>
+      <y>532.4752</y>
+      <theta>-1.39704978466034</theta>
     </rfoot>
     <lknee>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>336.3768</x>
+      <y>419.7316</y>
+      <theta>-1.81994616985321</theta>
     </lknee>
     <lfoot>
-      <x></x>
-      <y></y>
-      <theta></theta>
+      <x>345.021</x>
+      <y>538.3036</y>
+      <theta>-1.68377935886383</theta>
     </lfoot>
   </Pose>
 </Positions>

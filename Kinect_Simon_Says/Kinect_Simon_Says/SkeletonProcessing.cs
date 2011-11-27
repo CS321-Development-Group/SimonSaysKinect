@@ -101,8 +101,10 @@ namespace Kinect_Simon_Says
 
         public coord[] GetSkeletalData()
         {
-            if(skeleton != null)
+            if (skeleton != null)
+            {
                 Update();
+            }
             return coords;
         }
 

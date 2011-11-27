@@ -12,51 +12,131 @@ using System.Windows.Controls;
 
 namespace Kinect_Simon_Says
 {
-    class PauseButton
+    class PauseButton : Shape
     {
-        double Radius;
-        Point Center;
-        Ellipse ButtonOutline;
-        Line LeftPauseLine;
-        Line RightPauseLine;
-        public int timer;
-        public PauseButton(double radius, double xPos, double yPos, double strokeThickness, Brush LineColor, Brush FillColor )
+        public static readonly DependencyProperty RadiusProperty =
+            DependencyProperty.Register("RadiusProperty", typeof(double), typeof(PauseButton),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        /// <summary>
+        /// The radius of this CircleTimer
+        /// </summary>
+        public double Radius
         {
-            timer = 0;
-            Radius = radius;
-            Center = new Point(xPos, yPos);
-            ButtonOutline = new Ellipse();
-            ButtonOutline.Height = radius;
-            ButtonOutline.Width = radius;
-            ButtonOutline.Stroke = LineColor;
-            ButtonOutline.StrokeThickness = strokeThickness / 4;
-            ButtonOutline.Fill = FillColor;
-            ButtonOutline.Name = "pOutline";
-
-            LeftPauseLine = new Line();
-            LeftPauseLine.X1 = radius/3;
-            LeftPauseLine.X2 = radius/3;
-            LeftPauseLine.Y1 = radius/6;
-            LeftPauseLine.Y2 = (radius*5)/6;
-            LeftPauseLine.Stroke = LineColor;
-            LeftPauseLine.StrokeThickness = strokeThickness;
-            LeftPauseLine.Name = "lPauseLine";
-
-            RightPauseLine = new Line();
-            RightPauseLine.X1 = (radius*2) / 3;
-            RightPauseLine.X2 = (radius*2) / 3;
-            RightPauseLine.Y1 = radius / 6;
-            RightPauseLine.Y2 = (radius * 5) / 6;
-            RightPauseLine.Stroke = LineColor;
-            RightPauseLine.StrokeThickness = strokeThickness;
-            RightPauseLine.Name = "rPauseLine";
+            get { return (double)GetValue(RadiusProperty); }
+            set { SetValue(RadiusProperty, value); }
         }
-        public void Draw(UIElementCollection ele)
+
+        public static readonly DependencyProperty CenterXProperty =
+            DependencyProperty.Register("CenterXProperty", typeof(double), typeof(PauseButton),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        /// <summary>
+        /// The X coordinate of center of the circle
+        /// </summary>
+        public double CenterX
         {
-            ele.Add(this.ButtonOutline);
-            ele.Add(this.RightPauseLine);
-            ele.Add(this.LeftPauseLine);
+            get { return (double)GetValue(CenterXProperty); }
+            set { SetValue(CenterXProperty, value); }
+        }
+
+        public static readonly DependencyProperty CenterYProperty =
+            DependencyProperty.Register("CenterYProperty", typeof(double), typeof(PauseButton),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        /// <summary>
+        /// The Y coordinate of center of the circle
+        /// </summary>
+        public double CenterY
+        {
+            get { return (double)GetValue(CenterYProperty); }
+            set { SetValue(CenterYProperty, value); }
+        }
+        int timer;
+        const int MAX_TIMER = 100;
+        const double thickness = 3;
+
+        public PauseButton(double radius, double xPos, double yPos)
+        {
+            Radius = radius;
+            CenterX = xPos;
+            CenterY = yPos;
+
+            //LinearGradientBrush myFillBrush = new LinearGradientBrush();
+            //myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 0));
+            //myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, 2));
+            //myFillBrush.StartPoint = new Point(0, 0);
+            //myFillBrush.EndPoint = new Point(0, 1);
+            Fill = Brushes.DarkGray;
+            Stroke = System.Windows.Media.Brushes.Black;
+            StrokeThickness = Radius/8;
+            //Fill = myFillBrush;
+
+        }
+        protected override Geometry DefiningGeometry
+        {
+            get
+            {
+                // Create a StreamGeometry for describing the shape 
+                StreamGeometry geometry = new StreamGeometry();
+                geometry.FillRule = FillRule.Nonzero;
+
+                using (StreamGeometryContext context = geometry.Open())
+                {
+                    DrawGeometry(context);
+                }
+
+                // Freeze the geometry for performance benefits 
+                geometry.Freeze();
+
+                return geometry;
+            }
+        }
+        public bool isPressed(Point mousePos)
+        {
+            const int INCREMENT = 2;
+            if (mousePos.Y > CenterY - Radius && mousePos.Y < CenterY + Radius)
+            {
+                if (mousePos.X > CenterX - Radius && mousePos.X < CenterX + Radius)
+                {
+                    timer = timer + INCREMENT * 2;//we always subtract an increment so increment * 2 is actually 1 increment
+                }
+            }
+            if (timer > 0)
+            {
+                timer = timer - INCREMENT;
+            }
+            if (timer >= MAX_TIMER)
+            {
+                timer = 0;
+                return true;
+            }
+            return false;
+        }
+        public void DrawGeometry(StreamGeometryContext context)
+        {
+            const double LINE_MODIFIER = .7;
+
+            Point EllipseStartPoint = new Point(CenterX - Radius, CenterY);
+            Point HalfEllipseEndPoint = new Point(CenterX + Radius, CenterY);
+
+            Point LeftLineStartPoint =      new Point(CenterX - Radius * (1 - LINE_MODIFIER), (CenterY - (Radius * LINE_MODIFIER)));
+            Point LeftLineEndPoint =        new Point(CenterX - Radius * (1 - LINE_MODIFIER), (CenterY + (Radius * LINE_MODIFIER)));
+
+            Point RightLineStartPoint2 =    new Point(CenterX + Radius * (1 - LINE_MODIFIER), (CenterY - (Radius * LINE_MODIFIER)));
+            Point RightLineEndPoint2 =      new Point(CenterX + Radius * (1 - LINE_MODIFIER), (CenterY + (Radius * LINE_MODIFIER)));
+
+            Size ArcSize = new Size(Radius, Radius);
+            
+            context.BeginFigure(EllipseStartPoint, true, false);
+            context.ArcTo(HalfEllipseEndPoint, ArcSize, 0, false, SweepDirection.Counterclockwise, true, false);
+            context.ArcTo(EllipseStartPoint, ArcSize, 0, false, SweepDirection.Counterclockwise, true, false);
+            context.LineTo(LeftLineStartPoint, false, false);
+            context.LineTo(LeftLineEndPoint, true, true);
+            context.LineTo(RightLineEndPoint2, false, false);
+            context.LineTo(RightLineStartPoint2, true, true);
+            
         }
 
     }
-}
+} 
