@@ -5,19 +5,23 @@
         Title="MainWindow" Height="600" Width="800" Closed="Window_Closed" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Name="grid">
         <MediaElement Name="metest" Source=".\Audio\Welcome.wav" LoadedBehavior="Manual" UnloadedBehavior="Manual" />
-            <Canvas Margin="1" Name="playfield" SizeChanged="Playfield_SizeChanged">
-            <Canvas.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#D9040833" Offset="0.238" />
-                    <GradientStop Color="#FF46BC44" Offset="1" />
-                    <GradientStop Color="#E61747B2" Offset="0.811" />
+        <Canvas Margin="1" Name="playfield" SizeChanged="Playfield_SizeChanged">
+            <Canvas.Background >
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="SkyBlue" Offset=".25" />
                 </LinearGradientBrush>
             </Canvas.Background>
         </Canvas>
-        <Canvas Name="HUD" Height="600" Width="600">
-            
+        <Canvas Name="Island">
+            <Path Fill="Beige" Stroke="Black" StrokeThickness="1"
+    Data="M 0,600 L 100,475 L 250, 400 L 500,400 L 650,475 L 750,600" >
+                
+            </Path>       
+            </Canvas>
+
+        <Canvas Name="Design" >
+            <Ellipse Width="50" Height="50" Fill="Yellow" Canvas.Left="635" Canvas.Top="25"/>
         </Canvas>
-        <Canvas Height="80" Name="PauseButtonCanvas" Width="80" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" />
         <Canvas Name="SkeltalTracking">
             <Ellipse Canvas.Left="50" Canvas.Top="0" Height="10" Stroke="Black" Fill="Blue" Width="10" Name="rightEllipse" />
             <Button Canvas.Left="356" Canvas.Top="458" Content="CreatePose" Height="23" Name="CreatePose" Width="75" Click="CreatePose_Click" />

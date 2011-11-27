@@ -63,12 +63,28 @@ namespace Kinect_Simon_Says
             get { return (double)GetValue(HeightModifierProperty); }
             set { SetValue(HeightModifierProperty, value); }
         }
-        public LivesIndicator(double startPointX, double endPointX, double height, double heightModifier)
+        public static readonly DependencyProperty WaveHeightProperty =
+            DependencyProperty.Register("WaveHeightProperty", typeof(double), typeof(LivesIndicator),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+
+        /// <summary> 
+        /// The radius of this CircleTimer 
+        /// </summary> 
+        public double WaveHeight
+        {
+            get { return (double)GetValue(WaveHeightProperty); }
+            set { SetValue(WaveHeightProperty, value); }
+        }
+        public LivesIndicator(double startPointX, double endPointX, double startHeight, double waveHeight, double heightModifier)
         {
             StartPointX = startPointX;
             EndPointX = endPointX;
-            Height = height;
+            StartHeight = startHeight;
             HeightModifier = heightModifier;
+            WaveHeight = waveHeight;
+            //Fill = Brushes.DarkGray;
+            Stroke = System.Windows.Media.Brushes.Black;
         }
         protected override Geometry DefiningGeometry
         {
@@ -92,16 +108,19 @@ namespace Kinect_Simon_Says
 
         private void DrawGeometry(StreamGeometryContext context)
         {
-            Point StartPoint = new Point(StartPointX, StartHeight * HeightModifier);
-            Point EndPoint = new Point(EndPointX, StartHeight * HeightModifier);
-            Size WaveSize = new Size(Height, Height);
+            Point StartPoint =  new Point(StartPointX, StartHeight * (Game.STARTING_LIVES - HeightModifier + 1) );
+            Point EndPoint =    new Point(  EndPointX, StartHeight * (Game.STARTING_LIVES - HeightModifier + 1) );
+            Point BottomRight = new Point(EndPointX, StartHeight);
+            Size WaveSize = new Size(WaveHeight, WaveHeight);
             Point waveEndPoint = EndPoint;
-            context.BeginFigure(StartPoint, true, true);
+            context.BeginFigure(StartPoint, true, false);
             for (int i = 0; i < NUM_OF_WAVES; i++)
             {
-                waveEndPoint.X = ((EndPoint.X - StartPoint.X) / i);
+                waveEndPoint.X = ((EndPoint.X - StartPoint.X) * ((double)i / NUM_OF_WAVES));
                 context.ArcTo(waveEndPoint, WaveSize, 0, false, SweepDirection.Counterclockwise, true, true);
             }
+            context.ArcTo(waveEndPoint, WaveSize, 0, false, SweepDirection.Counterclockwise, true, true);
+
         }
         public void Draw(UIElementCollection children)
         {

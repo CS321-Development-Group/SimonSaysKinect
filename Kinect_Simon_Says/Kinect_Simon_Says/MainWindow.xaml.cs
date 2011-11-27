@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using Microsoft.Research.Kinect.Nui;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Navigation;
+
 
 
 

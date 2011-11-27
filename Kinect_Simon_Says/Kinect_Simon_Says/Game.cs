@@ -312,7 +312,7 @@ namespace Kinect_Simon_Says
         private const double CIRCLE_TIMER_HEIGHT = 200;
 
         private LivesIndicator Water = null;
-        private const int STARTING_LIVES = 3;
+        public const int STARTING_LIVES = 3;
         private int livesRemaining = 0;
 
         private PauseButton gamePauseButton = null;
@@ -333,7 +333,7 @@ namespace Kinect_Simon_Says
             poseTimer = new CircleTimer(sceneRect.Width / 2, sceneRect.Height / 2, CIRCLE_TIMER_WIDTH, CIRCLE_TIMER_HEIGHT);
             gamePauseButton = new PauseButton(PAUSE_BUTTON_RADIUS, sceneRect.Width / 2, PAUSE_BUTTON_RADIUS + 2);
             livesRemaining = STARTING_LIVES;
-            Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height / 2, livesRemaining); 
+            Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height / 2, 5, livesRemaining); 
         }
 
         public void SetFramerate(double actualFramerate)
@@ -348,16 +348,6 @@ namespace Kinect_Simon_Says
 
         public void Reset()
         {
-            //for (int i = 0; i < things.Count; i++)
-            //{
-            //    Thing thing = things[i];
-            //    if ((thing.state == ThingState.Bouncing) || (thing.state == ThingState.Falling))
-            //    {
-            //        thing.state = ThingState.Dissolving;
-            //        thing.dissolve = 0;
-            //        things[i] = thing;
-            //    }
-            //}
             gameStartTime = DateTime.Now;
             scores.Clear();
         }
@@ -455,6 +445,7 @@ namespace Kinect_Simon_Says
         public void DrawFrame(UIElementCollection children)
         {
             frameCount++;
+            children.Add(Water);
             if (this.gameMode == Game.GameMode.Playing)
             {
                 children.Add(gamePauseButton);
