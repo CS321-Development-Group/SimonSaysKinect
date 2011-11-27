@@ -110,8 +110,6 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
             mainMenu.draw();
   
-            //metest.Source = new Uri("/Welcome.wav", UriKind.Relative);
-
             kinectHighScores = new HighScores();
             kssLeaderBoard = new LeaderBoard();
             kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
@@ -521,27 +519,6 @@ namespace Kinect_Simon_Says
             //CheckPlayers();
         }
         #endregion GameTimer/Thread
-        //private void pauseGameButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    startGameButton.Visibility = Visibility.Visible;
-        //    startGameButton.Content = "Resume Game";
-        //    startGameButton.FontSize = 14;
-        //    //exitGameButton.Visibility = Visibility.Visible;
-        //    leaderboardButton.Visibility = Visibility.Visible;
-        //    pauseGameButton.Visibility = Visibility.Hidden;
-        //}
-
-        //private void startGameButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    MyPauseButton.Draw(HUD.Children);
-
-        //    startGameButton.Visibility = Visibility.Hidden;
-        //    //exitGameButton.Visibility = Visibility.Hidden;
-        //    leaderboardButton.Visibility = Visibility.Hidden;
-        //    pauseGameButton.Visibility = Visibility.Visible;
-
-
-        //}
 
         private void CreatePose_Click(object sender, RoutedEventArgs e)
         {
