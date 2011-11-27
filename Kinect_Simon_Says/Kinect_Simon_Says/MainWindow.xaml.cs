@@ -49,6 +49,7 @@ namespace Kinect_Simon_Says
         SkeletonProcessing kinectPlayerSkeleton;
         HighScores kinectHighScores;
         Menu mainMenu;
+        NewHighScore highscoreMenu;
         LeaderBoard kssLeaderBoard;
         MediaPlayer sound = new MediaPlayer();
 
@@ -109,6 +110,8 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Start"), MenuButton.Center);
             mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
             mainMenu.draw();
+
+            highscoreMenu = new NewHighScore(grid.Children);
   
             kinectHighScores = new HighScores();
             kssLeaderBoard = new LeaderBoard();
@@ -450,6 +453,10 @@ namespace Kinect_Simon_Says
 
         private void HandleGameTimer(int param)
         {
+            Point currHand = new Point();
+            Point currSelectionPosition = new Point();
+
+
             // Every so often, notify what our actual framerate is
             if ((frameCount % 100) == 0)
                 game.SetFramerate(1000.0 / actualFrameTime);
@@ -472,43 +479,53 @@ namespace Kinect_Simon_Says
                     //3 second hover and select for a button
                     if (skeletonData[(int)KSSJoint.head].x > 0)//should this be here? skeleton data is already not null... so what if the head is 0
                     {
-                        kinectPose.drawPose(this.PlayerPose.Children, kinectPose.GetPlayer());
+                        //kinectPose.drawPose(this.PlayerPose.Children, kinectPose.GetPlayer());
+                        kinectPose.drawPose(this.PlayerPose.Children, skeletonData);
                         SetEllipsePosition(rightEllipse, skeletonData[(int)KSSJoint.rhand]);
                     }
                 }
 
-                Point currHand = new Point(skeletonData[(int)KSSJoint.rhand].x, skeletonData[(int)KSSJoint.rhand].y);
+                currHand = new Point(skeletonData[(int)KSSJoint.rhand].x, skeletonData[(int)KSSJoint.rhand].y);
+                currSelectionPosition = currHand;
             }
+
+            // For mouse support, uncomment the following lines
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
+            currSelectionPosition = currMouse;
 
-            Point currSelectionPosition = currMouse;
-
-            MenuButton button = mainMenu.buttonPushed(currSelectionPosition, grid);
-            switch (button)
+            if (highscoreMenu.isHighScoreMenuActive())
             {
-                case MenuButton.LeftCenter:
-                    this.Close();
-                    break;
-                case MenuButton.Center:
+                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currSelectionPosition);
+            }
+            else
+            {
+                MenuButton button = mainMenu.buttonPushed(currSelectionPosition, grid);
+                switch (button)
+                {
+                    case MenuButton.LeftCenter:
+                        this.Close();
+                        break;
+                    case MenuButton.Center:
+                        mainMenu.hideMenu();
+                        game.SetGameMode(Game.GameMode.Playing);
+                        break;
+                    case MenuButton.RightCenter:
+                        kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
+                        kssLeaderBoard.draw(grid.Children);
+                        kssLeaderBoard.showLeaderBoard();
+                        break;
+                }
+                if (mainMenu.hiddenStatus() == "hiding")
                     mainMenu.hideMenu();
-                    game.SetGameMode(Game.GameMode.Playing);
-                    break;
-                case MenuButton.RightCenter:
-                    kssLeaderBoard.draw(grid.Children);
-                    kssLeaderBoard.showLeaderBoard();
-                    break;
-            }
-            if (mainMenu.hiddenStatus() == "hiding")
-                mainMenu.hideMenu();
-            else if (mainMenu.hiddenStatus() == "unhiding")
-                mainMenu.unhideMenu();
+                else if (mainMenu.hiddenStatus() == "unhiding")
+                    mainMenu.unhideMenu();
 
-            game.checkHovers(currSelectionPosition);
-            if (game.getGameMode() == Game.GameMode.Paused )
-            {
-                mainMenu.unhideMenu();
+                game.checkHovers(currSelectionPosition);
+                if (game.getGameMode() == Game.GameMode.Paused)
+                {
+                    mainMenu.unhideMenu();
+                }
             }
-            // End hover testing
             playfield.Children.Clear();
             game.DrawFrame(playfield.Children);
             foreach (var player in players)
@@ -528,8 +545,8 @@ namespace Kinect_Simon_Says
             //kinectHighScores.addHighScore(15, "br");
             //kinectHighScores.addHighScore(25, "ar");
             //kinectHighScores.addHighScore(16, "mlh");
-            mainMenu.hideMenu();
-
+            //mainMenu.hideMenu();
+            highscoreMenu.ActivateHighScoreMenu();
         }
 
 

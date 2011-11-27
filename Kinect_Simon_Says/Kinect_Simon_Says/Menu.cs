@@ -247,6 +247,56 @@ namespace Kinect_Simon_Says
             }
             return retval;
         }
+        public void deactivateButton()
+        {
+            double dblOffset;
+            Polygon element;
+            Canvas submenu;
+            LinearGradientBrush myBrush;
+            MenuButton _button;
+
+            for (int i = 0; i < menu.Children.Count; i++)
+            {
+                _button = (MenuButton)i;
+                submenu = (Canvas)menu.Children[i];
+                if (submenu.Children.Count > 0)
+                {
+                    element = (Polygon)submenu.Children[0];
+                    myBrush = (LinearGradientBrush)element.Fill;
+                    //dblOffset = myBrush.GradientStops[1].Offset;
+                    dblOffset = 2;
+                    if (dblOffset <= 2)
+                    {
+                        myBrush.GradientStops.Clear();
+                        myBrush.GradientStops.Add(new GradientStop(Colors.LightGray, 0));
+                        myBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, dblOffset));
+                        element.Fill = myBrush;
+                        dblOffset = dblOffset + 0.01;
+
+                        switch (_button)
+                        {
+                            case MenuButton.Left:
+                                left.Children[0] = element;
+                                break;
+                            case MenuButton.LeftCenter:
+                                leftcenter.Children[0] = element;
+                                break;
+                            case MenuButton.Center:
+                                center.Children[0] = element;
+                                break;
+                            case MenuButton.RightCenter:
+                                rightcenter.Children[0] = element;
+                                break;
+                            case MenuButton.Right:
+                                right.Children[0] = element;
+                                break;
+                        }
+                    }
+                    draw();
+                }
+            }
+
+        }
         private void deactivateButtons()
         {
             double dblOffset;

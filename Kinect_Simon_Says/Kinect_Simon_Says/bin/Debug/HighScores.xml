@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <HighScores>
   <HighScore>
+    <Score>50</Score>
+    <Initials>MSH</Initials>
+  </HighScore>
+  <HighScore>
+    <Score>50</Score>
+    <Initials>CARTER</Initials>
+  </HighScore>
+  <HighScore>
     <Score>25</Score>
     <Initials>ar</Initials>
   </HighScore>
