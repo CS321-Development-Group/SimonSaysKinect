@@ -298,7 +298,8 @@ namespace Kinect_Simon_Says
             Paused = 1,
             Playing = 2,
             Ending = 3,
-            Close = 4
+            Close = 4,
+            LdrBoard = 5
         }
         #region Variables
         private double targetFrameRate = 60;
@@ -323,7 +324,7 @@ namespace Kinect_Simon_Says
         private Pose KinectPose = null;
         Ellipse RightHand;
 
-        NewHighScore highscoreMenu;
+        HighScoreInitialMenu highscoreMenu;
         HighScores kinectHighScores;
         Menu mainMenu;
         LeaderBoard kssLeaderBoard;
@@ -348,7 +349,7 @@ namespace Kinect_Simon_Says
             Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height, 3, livesRemaining);
             RightHand = new Ellipse();
             KinectPose = new Pose();
-            highscoreMenu = new NewHighScore(grid.Children);
+            highscoreMenu = new HighScoreInitialMenu(grid.Children);
             kinectHighScores = new HighScores();
             mainMenu = new Menu(grid.Children, "mainMenu");
             mainMenu.addButton(new Button("Exit"), MenuButtonLocation.LeftCenter);
@@ -356,6 +357,7 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Leaderboard"), MenuButtonLocation.RightCenter);            
             mainMenu.draw();
             kssLeaderBoard = new LeaderBoard();
+            kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
             leaderboardtimer = 0;
         }
 
@@ -457,7 +459,7 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
-
+            //if (
         }
         public void checkHovers(Point MousePos, Grid grid)
         {
@@ -481,28 +483,19 @@ namespace Kinect_Simon_Says
                         gameMode = Game.GameMode.Playing;
                         break;
                     case MenuButtonLocation.RightCenter:
-                        kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
-                        kssLeaderBoard.draw(grid.Children);
-                        kssLeaderBoard.showLeaderBoard();
+                        mainMenu.hideMenu();
+                        kssLeaderBoard.unhide();
+                        gameMode = Game.GameMode.LdrBoard;
                         break;
                 }
-                if (kssLeaderBoard.isVisible())
+            }
+            else if (gameMode == GameMode.LdrBoard)
+            {
+                if (kssLeaderBoard.OK_Button_Hover(MousePos))
                 {
-
-                    if (MousePos.X >= 312 && MousePos.X <= 487 &&
-                       MousePos.Y >= 460 && MousePos.Y <= 490)
-                    {
-                        if (leaderboardtimer == 100)
-                        {
-                            kssLeaderBoard.hideLeaderBoard();
-                        }
-                        else
-                            leaderboardtimer = leaderboardtimer + 1;
-                    }
-                    else
-                        leaderboardtimer = 0;
+                    kssLeaderBoard.hide();
+                    gameMode = Game.GameMode.Off;
                 }
-
             }
         }
         public void DrawCursor(Point currPos, UIElementCollection children)
@@ -566,6 +559,10 @@ namespace Kinect_Simon_Says
             else if (this.gameMode == Game.GameMode.Off)
             {
                 mainMenu.unhideMenu();
+            }
+            else if (this.gameMode == Game.GameMode.LdrBoard)
+            {
+                kssLeaderBoard.draw(grid.Children);
             }
             else if (this.gameMode == Game.GameMode.Ending)
             {

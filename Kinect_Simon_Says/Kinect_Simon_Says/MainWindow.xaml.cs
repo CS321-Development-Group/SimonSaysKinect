@@ -47,10 +47,6 @@ namespace Kinect_Simon_Says
         //DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
         SkeletonProcessing kinectPlayerSkeleton;
 
-        HighScores kinectHighScores;
-        Menu mainMenu;
-        NewHighScore highscoreMenu;
-        LeaderBoard kssLeaderBoard;
         MediaPlayer sound = new MediaPlayer();
 
         #endregion Private State
@@ -435,6 +431,10 @@ namespace Kinect_Simon_Says
 
         private void HandleGameTimer(int param)
         {
+            if (game.getGameMode() == Game.GameMode.Close)
+            {
+                this.Close();
+            }
             Point currCursorPosition = new Point();
 
 
@@ -460,11 +460,11 @@ namespace Kinect_Simon_Says
             game.checkHovers(currCursorPosition, this.grid);
 
             playfield.Children.Clear();
-            game.DrawCursor(currCursorPosition, playfield.Children);
             playfield.Children.Add(Sun);
             playfield.Children.Add(Island);
             game.DrawFrame(playfield.Children, this.grid, currCursorPosition);
             BannerText.Draw(playfield.Children);
+            game.DrawCursor(currCursorPosition, playfield.Children);
         }
         #endregion GameTimer/Thread
 

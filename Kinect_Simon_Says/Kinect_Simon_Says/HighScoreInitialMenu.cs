@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace Kinect_Simon_Says
 {
-    class NewHighScore
+    class HighScoreInitialMenu
     {
         Canvas highscoreCanvas;
         Menu allLetters;
@@ -25,7 +25,7 @@ namespace Kinect_Simon_Says
         int backtimer;
         int donetimer;
 
-        public NewHighScore(UIElementCollection _gridChildren)
+        public HighScoreInitialMenu(UIElementCollection _gridChildren)
         {
             LinearGradientBrush myGradBrus = new LinearGradientBrush(Colors.DarkGreen, Colors.LightGray, new Point(.5, 0), new Point(.5, 1));
             highscoreCanvas = new Canvas();

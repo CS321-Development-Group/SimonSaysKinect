@@ -70,10 +70,10 @@ namespace Kinect_Simon_Says
         public bool isPressed(Point mousePos)
         {
             LinearGradientBrush myFillBrush = new LinearGradientBrush();
-            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 1));
-            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, timer / MAX_TIMER));
+            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, 1-(double)timer / MAX_TIMER));
+            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 0));
             myFillBrush.StartPoint = new Point(0, 0);
-            myFillBrush.EndPoint = new Point(0, 1);
+            myFillBrush.EndPoint = new Point(0, 10);
             Fill = myFillBrush;
 
             const int INCREMENT = 2;

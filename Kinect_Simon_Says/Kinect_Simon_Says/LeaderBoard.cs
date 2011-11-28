@@ -27,6 +27,7 @@ namespace Kinect_Simon_Says
         Label LeaderBoardHeader;
         Line lbline;
         LBName[] LBList;
+        int leaderboardTimer = 0;
         System.Windows.Controls.Button lbButton;
         public LeaderBoard()
         {
@@ -99,7 +100,6 @@ namespace Kinect_Simon_Says
             lbButton.Margin = new Thickness(12.5, 300, 0, 0);
             lbButton.FontWeight = FontWeights.Bold;
             lbButton.Content = "OK";
-            lbButton.Click += new RoutedEventHandler(lbButton_Click);
 
             LeaderBoardCanvas.Children.Add(lbRectangle);
             LeaderBoardCanvas.Children.Add(LeaderBoardHeader);
@@ -111,9 +111,26 @@ namespace Kinect_Simon_Says
             }
             LeaderBoardCanvas.Children.Add(lbButton);
         }
-        void lbButton_Click(object sender, RoutedEventArgs e)
+        public bool OK_Button_Hover(Point CursorPos)
         {
-            this.hideLeaderBoard();
+            if (CursorPos.X >= 312 && CursorPos.X <= 487 && CursorPos.Y >= 460 && CursorPos.Y <= 490)
+            {
+                if (leaderboardTimer > 50)
+                {
+                    leaderboardTimer = 0;
+                    return true;
+                }
+                else
+                    leaderboardTimer++;
+            }
+            else
+            {
+                if (leaderboardTimer > 0)
+                {
+                    leaderboardTimer--;
+                }
+            }
+            return false;
         }
         public void draw(UIElementCollection _element)
         {
@@ -130,19 +147,14 @@ namespace Kinect_Simon_Says
             LeaderBoardCanvas.Children.Add(lbButton);
             _element.Add(LeaderBoardCanvas);
         }
-        public void showLeaderBoard()
-        {
-            LeaderBoardCanvas.Visibility = Visibility.Visible;
-        }
-        public void hideLeaderBoard()
+        public void hide()
         {
             LeaderBoardCanvas.Visibility = Visibility.Hidden;
         }
-        public bool isVisible()
+        public void unhide()
         {
-            return LeaderBoardCanvas.IsVisible;
+            LeaderBoardCanvas.Visibility = Visibility.Visible;
         }
-
         public void fillLeaderBoard(List<highscore> _highscores)
         {
             for (int i = 0; i < 10 && i < _highscores.Count; i++)

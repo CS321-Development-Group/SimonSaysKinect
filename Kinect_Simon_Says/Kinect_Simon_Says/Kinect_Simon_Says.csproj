@@ -80,7 +80,7 @@
     <Compile Include="LeaderBoard.cs" />
     <Compile Include="LivesIndicator.cs" />
     <Compile Include="Menu.cs" />
-    <Compile Include="NewHighScore.cs" />
+    <Compile Include="HighScoreInitialMenu.cs" />
     <Compile Include="PauseButton.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Pose.cs" />
@@ -164,6 +164,7 @@
     <Content Include="audio\Welcome.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="HighScores.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
