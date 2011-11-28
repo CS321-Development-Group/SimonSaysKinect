@@ -1,31 +1,27 @@
 <?xml version="1.0"?>
 <HighScores>
   <HighScore>
-    <Score>50</Score>
+    <Score>250</Score>
     <Initials>MSH</Initials>
   </HighScore>
   <HighScore>
-    <Score>50</Score>
+    <Score>150</Score>
     <Initials>CARTER</Initials>
   </HighScore>
   <HighScore>
+    <Score>140</Score>
+    <Initials>BEN</Initials>
+  </HighScore>
+  <HighScore>
+    <Score>140</Score>
+    <Initials>AARON</Initials>
+  </HighScore>
+  <HighScore>
+    <Score>80</Score>
+    <Initials>ST</Initials>
+  </HighScore>
+  <HighScore>
     <Score>50</Score>
-    <Initials>BLZ</Initials>
-  </HighScore>
-  <HighScore>
-    <Score>25</Score>
-    <Initials>ar</Initials>
-  </HighScore>
-  <HighScore>
-    <Score>16</Score>
-    <Initials>mlh</Initials>
-  </HighScore>
-  <HighScore>
-    <Score>15</Score>
-    <Initials>br</Initials>
-  </HighScore>
-  <HighScore>
-    <Score>12</Score>
-    <Initials>blh</Initials>
+    <Initials>BEN</Initials>
   </HighScore>
 </HighScores>

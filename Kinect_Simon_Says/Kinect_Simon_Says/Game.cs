@@ -276,7 +276,6 @@ namespace Kinect_Simon_Says
                     i--;
                 }
             }
-
             foreach (var flyout in flyingTexts)
             {
                 flyout.Advance();
@@ -329,6 +328,8 @@ namespace Kinect_Simon_Says
         private bool DoThis = false;
         Ellipse RightHand;
 
+        const double ANGULAR_VARIANCE = 8;
+
         HighScoreInitialMenu highscoreMenu;
         HighScores kinectHighScores;
         Menu mainMenu;
@@ -367,7 +368,6 @@ namespace Kinect_Simon_Says
             SimonDoesnt.Open(new Uri(".\\audio\\SimonDoesnt.wav", UriKind.RelativeOrAbsolute));
             SimonSays.Open(new Uri(".\\audio\\SimonSays.wav", UriKind.RelativeOrAbsolute));
 
-
         }
 
         public void SetFramerate(double actualFramerate)
@@ -382,6 +382,9 @@ namespace Kinect_Simon_Says
 
         public void Reset()
         {
+            kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
+            livesRemaining = STARTING_LIVES;
+            Water.UpdateIndicator(livesRemaining);
             gameStartTime = DateTime.Now;
             scores.Clear();
         }
@@ -468,18 +471,18 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
-            if (KinectPose.isValid(KinectPose.GetPlayer(), 5))
+            if (gameMode == GameMode.Playing)
             {
-                if (DoThis)
+                if (KinectPose.isValid(KinectPose.GetPlayer(), ANGULAR_VARIANCE))
                 {
-                    AddToScore(1, 10, new Point(300, 400));
-                    currPoseNum++;
-                    KinectPose.SetSimon(KinectPose.GetNewPose(currPoseNum));
-                    poseTimer.WedgeAngle = 0;
-                }
-                else
-                {
-                    invalidPose();
+                    if (DoThis)
+                    {
+                        validPose();
+                    }
+                    else
+                    {
+                        invalidPose();
+                    }
                 }
             }
         }
@@ -487,6 +490,7 @@ namespace Kinect_Simon_Says
         {
             if (gameMode == Game.GameMode.Playing)
             {
+                mainMenu.hideMenu();
                 if (gamePauseButton.isPressed(MousePos))
                 {
                     gameMode = Game.GameMode.Paused;
@@ -494,6 +498,7 @@ namespace Kinect_Simon_Says
             }
             else if (gameMode == Game.GameMode.Off)
             {
+                mainMenu.unhideMenu();
                 MenuButtonLocation button = mainMenu.buttonPushed(MousePos, grid);
                 switch (button)
                 {
@@ -507,12 +512,12 @@ namespace Kinect_Simon_Says
                         break;
                     case MenuButtonLocation.RightCenter:
                         kssLeaderBoard.unhide();
-                        gameMode = Game.GameMode.LdrBoard;
                         break;
                 }
             }
             else if (gameMode == Game.GameMode.Paused)
-            { 
+            {
+                mainMenu.unhideMenu();
                 MenuButtonLocation button = mainMenu.buttonPushed(MousePos, grid);
                 switch (button)
                 {
@@ -532,21 +537,21 @@ namespace Kinect_Simon_Says
                             SimonDoesnt.Stop();
                             SimonDoesnt.Play();
                         }
-
                         break;
                     case MenuButtonLocation.RightCenter:
                         kssLeaderBoard.unhide();
-                        gameMode = Game.GameMode.LdrBoard;
                         break;
                 }
 
             }
-            if (gameMode == GameMode.LdrBoard)
+            if (kssLeaderBoard.isVisible())
             {
+                mainMenu.hideMenu();
+                mainMenu.hideMenu();
                 if (kssLeaderBoard.OK_Button_Hover(MousePos))
                 {
                     kssLeaderBoard.hide();
-                    gameMode = Game.GameMode.Off;
+                   // mainMenu.unhideMenu();
                 }
             }
         }
@@ -565,15 +570,20 @@ namespace Kinect_Simon_Says
             frameCount++;
             if (gameMode == Game.GameMode.Playing)
             {
-                mainMenu.hideMenu();
-
                 if (poseTimer.WedgeAngle < 360)
                 {
                     poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
                 }
-                else
+                else//The timer is done check the pose
                 {
-                    invalidPose();
+                    if (DoThis)
+                    {
+                        invalidPose();
+                    }
+                    else
+                    {
+                        validPose();
+                    }
                 }
                 if (scores.Count != 0)
                 {
@@ -594,23 +604,24 @@ namespace Kinect_Simon_Says
             }
             else if (this.gameMode == Game.GameMode.Paused)
             {
+                if (kssLeaderBoard.isVisible())
+                {
+                    kssLeaderBoard.draw(grid.Children);
+                }
                 children.Add(Water);
                 children.Add(poseTimer);
                 mainMenu.unhideMenu();
             }
             else if (this.gameMode == Game.GameMode.Off)
             {
-                mainMenu.unhideMenu();
-            }
-            else if (this.gameMode == Game.GameMode.LdrBoard)
-            {
-                mainMenu.hideMenu();
-                kssLeaderBoard.draw(grid.Children);
+                Reset();
+                if (kssLeaderBoard.isVisible())
+                {
+                    kssLeaderBoard.draw(grid.Children);
+                }
             }
             else if (this.gameMode == Game.GameMode.Ending)
             {
-                mainMenu.hideMenu();
-                GameOver.Play();
                 if (scores.Count > 0)
                 {
                     foreach (var score in scores)
@@ -618,10 +629,13 @@ namespace Kinect_Simon_Says
                         if (kinectHighScores.isHighScore(score.Value))
                         {
                             highscoreMenu.ActivateHighScoreMenu();
-                            highscoreMenu.inputHighScore(kinectHighScores, score.Value, grid, currPos);
-                            gameMode = Game.GameMode.Off;
+                            highscoreMenu.inputHighScore(kinectHighScores, score.Value, grid, currPos, ref gameMode);
                         }
                     }
+                }
+                else
+                {
+                    gameMode = Game.GameMode.Off;
                 }
             }
         }
@@ -635,10 +649,10 @@ namespace Kinect_Simon_Says
         {
             if (skeletonCoords != null)
             {
-                KinectPose.drawPose(SimonSaysPoseCanvas.Children, KinectPose.GetSimon());
+                KinectPose.drawPose(SimonSaysPoseCanvas.Children, KinectPose.GetSimon(), Colors.Black);
                 if (skeletonCoords[(int)KSSJoint.head].x > 0)//this makes a big green blob if it isn't here.. odd
                 {
-                    KinectPose.drawPose(PlayerPoseCanvas.Children, skeletonCoords);
+                    KinectPose.drawPose(PlayerPoseCanvas.Children, skeletonCoords, Colors.Green);
                     KinectPose.SetPlayer(skeletonCoords);
                 }
             }
@@ -647,7 +661,15 @@ namespace Kinect_Simon_Says
         private void newPose()
         {
             DoThis = randomBool();
-            currPoseNum++;
+            if (currPoseNum < 12)
+            {
+                currPoseNum++;
+            }
+            else
+            {
+                currPoseNum = 0;
+            }
+
             KinectPose.SetSimon(KinectPose.GetNewPose(currPoseNum));
             poseTimer.WedgeAngle = 0;
             if (DoThis)
@@ -675,9 +697,15 @@ namespace Kinect_Simon_Says
             }
             else
             {
+                GameOver.Play();
                 gameMode = GameMode.Ending;
             }
 
+        }
+        private void validPose()
+        {
+            AddToScore(1, 10, new Point(300, 400));
+            newPose();
         }
     }
 }

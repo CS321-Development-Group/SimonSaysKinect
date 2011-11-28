@@ -46,6 +46,7 @@ namespace Kinect_Simon_Says
             LeaderBoardCanvas.Margin = new Thickness(0,0,0,0);
             LeaderBoardCanvas.HorizontalAlignment = HorizontalAlignment.Center;
             LeaderBoardCanvas.VerticalAlignment = VerticalAlignment.Top;
+            LeaderBoardCanvas.Visibility = Visibility.Hidden;
 
                         
             lbRectangle.Width = 200;
@@ -156,6 +157,10 @@ namespace Kinect_Simon_Says
         public void unhide()
         {
             LeaderBoardCanvas.Visibility = Visibility.Visible;
+        }
+        public bool isVisible()
+        {
+            return LeaderBoardCanvas.Visibility == Visibility.Visible;
         }
         public void fillLeaderBoard(List<highscore> _highscores)
         {

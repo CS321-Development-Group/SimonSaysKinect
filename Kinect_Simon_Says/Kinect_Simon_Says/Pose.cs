@@ -179,7 +179,7 @@ namespace Kinect_Simon_Says
             xmlDoc.Save("PoseData.xml");
         }
         #endregion
-        private Image getImage(coord[] _pose)
+        private Image getImage(coord[] _pose, Color _color)
         {
             Image image = new Image();
             DrawingImage myDrawingImage = new DrawingImage();
@@ -204,7 +204,8 @@ namespace Kinect_Simon_Says
             myPen.LineJoin = PenLineJoin.Round;
             myPen.EndLineCap = PenLineCap.Round;
             myPen.StartLineCap = PenLineCap.Round;
-            myPen.Brush = new SolidColorBrush(Colors.Green);
+
+            myPen.Brush = new SolidColorBrush(_color);
             myGeometryDrawing.Pen = myPen;
             myDrawingGroup.Children.Add(myGeometryDrawing);
             myDrawingImage.Drawing = myDrawingGroup;
@@ -224,10 +225,10 @@ namespace Kinect_Simon_Says
         {
             return new LineGeometry(new Point(_pose[(int)_start].x, _pose[(int)_start].y), new Point(_pose[(int)_end].x, _pose[(int)_end].y));
         }
-        public void drawPose(UIElementCollection _children, coord[] _pose)
+        public void drawPose(UIElementCollection _children, coord[] _pose, Color _color)
         {
             _children.Clear();
-            _children.Add(getImage(_pose));
+            _children.Add(getImage(_pose, _color));
         }
         public coord[] GetSimon()
         {

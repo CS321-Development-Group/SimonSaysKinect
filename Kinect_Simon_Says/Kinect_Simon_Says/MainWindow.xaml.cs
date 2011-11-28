@@ -455,8 +455,8 @@ namespace Kinect_Simon_Says
             }
 
             // For mouse support, uncomment the following lines
-            Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
-            currCursorPosition = currMouse;
+            //Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
+            //currCursorPosition = currMouse;
             
             game.checkHovers(currCursorPosition, this.grid);
 
