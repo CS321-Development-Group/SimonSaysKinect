@@ -468,7 +468,7 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
-            if (KinectPose.isValid(KinectPose.GetPlayer(), 10))
+            if (KinectPose.isValid(KinectPose.GetPlayer(), 5))
             {
                 if (DoThis)
                 {
@@ -605,6 +605,7 @@ namespace Kinect_Simon_Says
                 if (skeletonCoords[(int)KSSJoint.head].x > 0)//this makes a big green blob if it isn't here.. odd
                 {
                     KinectPose.drawPose(PlayerPoseCanvas.Children, skeletonCoords);
+                    KinectPose.SetPlayer(skeletonCoords);
                 }
             }
             return (new Point(skeletonCoords[(int)KSSJoint.rhand].x, skeletonCoords[(int)KSSJoint.rhand].y));

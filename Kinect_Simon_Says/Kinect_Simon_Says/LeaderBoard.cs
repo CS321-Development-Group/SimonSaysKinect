@@ -45,6 +45,8 @@ namespace Kinect_Simon_Says
             LeaderBoardCanvas.Height = 342;
             LeaderBoardCanvas.Margin = new Thickness(0,75,0,0);
             LeaderBoardCanvas.HorizontalAlignment = HorizontalAlignment.Center;
+            LeaderBoardCanvas.VerticalAlignment = VerticalAlignment.Top;
+
                         
             lbRectangle.Width = 200;
             lbRectangle.Height = 342;
@@ -136,7 +138,6 @@ namespace Kinect_Simon_Says
         {
             _element.Remove(LeaderBoardCanvas);
             LeaderBoardCanvas.Children.Clear();
-            LeaderBoardCanvas.TranslatePoint(new Point(300, 400), LeaderBoardCanvas);
             LeaderBoardCanvas.Children.Add(lbRectangle);
             LeaderBoardCanvas.Children.Add(LeaderBoardHeader);
             LeaderBoardCanvas.Children.Add(lbline);

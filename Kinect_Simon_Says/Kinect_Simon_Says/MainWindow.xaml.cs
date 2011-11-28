@@ -455,8 +455,8 @@ namespace Kinect_Simon_Says
             }
 
             // For mouse support, uncomment the following lines
-            Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
-            currCursorPosition = currMouse;
+            //Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
+            //currCursorPosition = currMouse;
             
             game.checkHovers(currCursorPosition, this.grid);
 
@@ -469,20 +469,6 @@ namespace Kinect_Simon_Says
             game.DrawCursor(currCursorPosition, topLayer.Children);
         }
         #endregion GameTimer/Thread
-
-        private void CreatePose_Click(object sender, RoutedEventArgs e)
-        {
-            //coord[] test = kinectPlayerSkeleton.GetSkeletalData();
-            //kinectPose.RecordNewPose(test);
-            //kinectHighScores.addHighScore(12, "blh");
-            //kinectHighScores.addHighScore(15, "br");
-            //kinectHighScores.addHighScore(25, "ar");
-            //kinectHighScores.addHighScore(16, "mlh");
-            //mainMenu.hideMenu();
-            //highscoreMenu.ActivateHighScoreMenu();
-        }
-
-
     }
 }
 // Since the timer resolution defaults to about 10ms precisely, we need to
