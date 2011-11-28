@@ -36,7 +36,6 @@ namespace Kinect_Simon_Says
         }
         private void fillList(ref List<coord[]> EmptyList)
         {
-            coord[] coords = new coord[11];
             if (System.IO.File.Exists("PoseData.xml"))
             {
                 XmlNodeList xmlnodes;
@@ -45,6 +44,7 @@ namespace Kinect_Simon_Says
                 xmlnodes = xmldoc.SelectNodes("//Positions/Pose");
                 foreach (XmlNode node in xmlnodes)
                 {
+                    coord[] coords = new coord[11];
                     fillCoords(ref coords, KSSJoint.head, "head", node);
                     fillCoords(ref coords, KSSJoint.shoulder, "shoulder", node);
                     fillCoords(ref coords, KSSJoint.hip, "hip", node);

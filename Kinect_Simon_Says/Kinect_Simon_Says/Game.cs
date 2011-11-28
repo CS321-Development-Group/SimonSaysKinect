@@ -302,6 +302,10 @@ namespace Kinect_Simon_Says
             LdrBoard = 5
         }
         #region Variables
+        MediaPlayer GameOver = new MediaPlayer();
+        MediaPlayer SimonDoesnt = new MediaPlayer();
+        MediaPlayer SimonSays = new MediaPlayer();
+
         private double targetFrameRate = 60;
         private int intraFrames = 1;
         private int frameCount = 0;
@@ -322,14 +326,15 @@ namespace Kinect_Simon_Says
         private const double PAUSE_BUTTON_RADIUS = 30;
 
         private Pose KinectPose = null;
+        private bool DoThis = false;
         Ellipse RightHand;
 
         HighScoreInitialMenu highscoreMenu;
         HighScores kinectHighScores;
         Menu mainMenu;
         LeaderBoard kssLeaderBoard;
-        int leaderboardtimer;
 
+        int currPoseNum = 0;
 
         private Color baseColor = Color.FromRgb(0, 0, 0);
         
@@ -358,7 +363,11 @@ namespace Kinect_Simon_Says
             mainMenu.draw();
             kssLeaderBoard = new LeaderBoard();
             kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
-            leaderboardtimer = 0;
+            GameOver.Open(new Uri(".\\audio\\GameOver.wav", UriKind.RelativeOrAbsolute));
+            SimonDoesnt.Open(new Uri(".\\audio\\SimonDoesnt.wav", UriKind.RelativeOrAbsolute));
+            SimonSays.Open(new Uri(".\\audio\\SimonSays.wav", UriKind.RelativeOrAbsolute));
+
+
         }
 
         public void SetFramerate(double actualFramerate)
@@ -459,7 +468,20 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
-            //if (
+            if (KinectPose.isValid(KinectPose.GetPlayer(), 10))
+            {
+                if (DoThis)
+                {
+                    AddToScore(1, 10, new Point(300, 600));
+                    currPoseNum++;
+                    KinectPose.SetSimon(KinectPose.GetNewPose(currPoseNum));
+                    poseTimer.WedgeAngle = 0;
+                }
+                else
+                {
+                    invalidPose();
+                }
+            }
         }
         public void checkHovers(Point MousePos, Grid grid)
         {
@@ -480,16 +502,16 @@ namespace Kinect_Simon_Says
                         break;
                     case MenuButtonLocation.Center:
                         mainMenu.hideMenu();
+                        newPose();
                         gameMode = Game.GameMode.Playing;
                         break;
                     case MenuButtonLocation.RightCenter:
-                        mainMenu.hideMenu();
                         kssLeaderBoard.unhide();
                         gameMode = Game.GameMode.LdrBoard;
                         break;
                 }
             }
-            else if (gameMode == GameMode.LdrBoard)
+            if (gameMode == GameMode.LdrBoard)
             {
                 if (kssLeaderBoard.OK_Button_Hover(MousePos))
                 {
@@ -520,18 +542,7 @@ namespace Kinect_Simon_Says
                 }
                 else
                 {
-                    poseTimer.WedgeAngle = 0;
-                    if (livesRemaining > 1)
-                    {
-                        livesRemaining -= 1;
-                        Water.UpdateIndicator(livesRemaining);
-                    }
-                    else
-                    {
-                        livesRemaining -= 1;
-                        Water.UpdateIndicator(livesRemaining);
-                        gameMode = GameMode.Ending;
-                    }
+                    invalidPose();
                 }
                 if (scores.Count != 0)
                 {
@@ -562,11 +573,22 @@ namespace Kinect_Simon_Says
             }
             else if (this.gameMode == Game.GameMode.LdrBoard)
             {
+                mainMenu.hideMenu();
                 kssLeaderBoard.draw(grid.Children);
             }
             else if (this.gameMode == Game.GameMode.Ending)
             {
-                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currPos);
+                GameOver.Play();
+                if (scores.Count > 0)
+                {
+                    foreach (var score in scores)
+                    {
+                        if (kinectHighScores.isHighScore(score.Value))
+                        highscoreMenu.ActivateHighScoreMenu();
+                    }
+                }
+                //highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currPos);
+                gameMode = Game.GameMode.Off;
             }
         }
 
@@ -586,6 +608,41 @@ namespace Kinect_Simon_Says
                 }
             }
             return (new Point(skeletonCoords[(int)KSSJoint.rhand].x, skeletonCoords[(int)KSSJoint.rhand].y));
+        }
+        private void newPose()
+        {
+            DoThis = randomBool();
+            currPoseNum++;
+            KinectPose.SetSimon(KinectPose.GetNewPose(currPoseNum));
+            poseTimer.WedgeAngle = 0;
+            if (DoThis)
+            {
+                SimonSays.Play();
+                System.Threading.Thread.Sleep(500);
+            }
+            else
+            {
+                SimonDoesnt.Play();
+                System.Threading.Thread.Sleep(500);
+            }
+        }
+        private bool randomBool()
+        {
+            return ((new Random()).NextDouble() > .5);
+        }
+        private void invalidPose()
+        {
+            livesRemaining -= 1;
+            Water.UpdateIndicator(livesRemaining);
+            if (livesRemaining >= 1)
+            {
+                newPose();
+            }
+            else
+            {
+                gameMode = GameMode.Ending;
+            }
+
         }
     }
 }
