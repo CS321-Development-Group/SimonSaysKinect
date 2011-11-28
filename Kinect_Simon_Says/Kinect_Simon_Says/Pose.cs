@@ -22,10 +22,19 @@ namespace Kinect_Simon_Says
         public Pose()
         {
             player = new coord[11];
-            simon = new coord[11];
             simonPoses = new List<coord[]>();
+
+            fillList(ref simonPoses);
+            if (simonPoses.Count > 0)
+            {
+                simon = simonPoses[0];
+            }
+            else
+            {
+                throw new InvalidOperationException("There were no poses in the given xml file");
+            }
         }
-        private void fillList(string _xmlfile)
+        private void fillList(ref List<coord[]> EmptyList)
         {
             coord[] coords = new coord[11];
             if (System.IO.File.Exists("PoseData.xml"))
@@ -47,7 +56,7 @@ namespace Kinect_Simon_Says
                     fillCoords(ref coords, KSSJoint.rfoot, "rfoot", node);
                     fillCoords(ref coords, KSSJoint.lknee, "lknee", node);
                     fillCoords(ref coords, KSSJoint.lfoot, "lfoot", node);
-                    simonPoses.Add(coords);
+                    EmptyList.Add(coords);
                 }
             }
         }
@@ -89,14 +98,9 @@ namespace Kinect_Simon_Says
         {
             player = _player;
         }
-        public coord[] GetNewPose()
+        public coord[] GetNewPose(int index)
         {
-
-            fillList("PoseData.xml");
-            simon = simonPoses[0];
-            return simon;
-            //xml parse for new pose
-            //save to simon
+            return (simonPoses[index]);
         }
         private void CalculateTheta(ref coord[] _coords)
         {
@@ -122,6 +126,7 @@ namespace Kinect_Simon_Says
             theta = (float)Math.Atan2((double)(_y - _coords[(int)_joint].y), (double)(_coords[(int)_joint].x - _x));
             return theta;
         }
+        #region AddingNewPose
         private XmlElement PoseElement(string _name, KSSJoint _joint, XmlDocument _xmlDoc)
         {
             XmlText x;
@@ -173,6 +178,7 @@ namespace Kinect_Simon_Says
             //save document
             xmlDoc.Save("PoseData.xml");
         }
+        #endregion
         private Image getImage(coord[] _pose)
         {
             Image image = new Image();
@@ -213,6 +219,7 @@ namespace Kinect_Simon_Says
 
             return image;
         }
+
         private LineGeometry getLine(KSSJoint _start, KSSJoint _end, coord[] _pose)
         {
             return new LineGeometry(new Point(_pose[(int)_start].x, _pose[(int)_start].y), new Point(_pose[(int)_end].x, _pose[(int)_end].y));
@@ -226,9 +233,13 @@ namespace Kinect_Simon_Says
         {
             return simon;
         }
+        public void SetSimon(coord[] newSimon)
+        {
+            simon = newSimon;
+        }
         public coord[] GetPlayer()
         {
-            return player;
+                return player;
         }
     }
 }

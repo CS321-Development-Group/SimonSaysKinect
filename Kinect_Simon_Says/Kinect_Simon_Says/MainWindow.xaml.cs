@@ -45,8 +45,8 @@ namespace Kinect_Simon_Says
         //SpeechRecognizer speechRecognizer = null;
 
         //DateTime ButtonSelectTime = new DateTime(1976, 11, 25);
-        Pose kinectPose = new Pose();
         SkeletonProcessing kinectPlayerSkeleton;
+
         HighScores kinectHighScores;
         Menu mainMenu;
         NewHighScore highscoreMenu;
@@ -87,18 +87,13 @@ namespace Kinect_Simon_Says
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            playfield.ClipToBounds = true;
-            //MyPauseButton = new PauseButton(80, 50, 50, 10, Brushes.Black, Brushes.DarkGray);
-            //MyPauseButton.Draw(PauseButtonCanvas.Children);
-            //poseTimer = new CircleTimer(HUD.Height / 2, HUD.Height / 2, 180, 200);
-            //PauseButtonCanvas.Visibility = Visibility.Hidden;
+            playfield.ClipToBounds = false;
             sound.Open(new Uri(".\\audio\\Welcome.wav", UriKind.RelativeOrAbsolute));
 
             UpdatePlayfieldSize();
             game = new Game(targetFramerate, NumIntraFrames, screenRect);
             game.SetGameMode(Game.GameMode.Off);
 
-            kinectPose.GetNewPose();
             KinectStart();
             Win32Timer.timeBeginPeriod(TimerResolution);
             var gameThread = new Thread(GameThread);
@@ -371,27 +366,25 @@ namespace Kinect_Simon_Says
         #endregion Most apps won't modify this code
 
         #endregion Kinect discovery + setup
+
         void SkeletonsReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
-            SkeletonData skeleton = (from s in skeletonFrame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
+            SkeletonData skeleton = (from aFrame in skeletonFrame.Skeletons where aFrame.TrackingState == SkeletonTrackingState.Tracked select aFrame).FirstOrDefault();
             if (kinectPlayerSkeleton == null)
+            {
                 kinectPlayerSkeleton = new SkeletonProcessing(skeleton, 1f);
+            }
             else
+            {
                 kinectPlayerSkeleton.SetSkeletonData(skeleton);
-
+            }
         }
         private void SetEllipsePosition(FrameworkElement ellipse, coord joint)
         {
             Canvas.SetLeft(ellipse, joint.x);
             Canvas.SetTop(ellipse, joint.y);
         }
-
-        private void Playfield_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdatePlayfieldSize();
-        }
-
         private void UpdatePlayfieldSize()
         {
             // Size of player wrt size of playfield, putting ourselves low on the screen.
@@ -453,8 +446,7 @@ namespace Kinect_Simon_Says
 
         private void HandleGameTimer(int param)
         {
-            Point currHand = new Point();
-            Point currSelectionPosition = new Point();
+            Point currCursorPosition = new Point();
 
 
             // Every so often, notify what our actual framerate is
@@ -468,38 +460,22 @@ namespace Kinect_Simon_Says
             }
             //// Draw new Wpf scene by adding all objects to canvas
 
-            // Testing hover over buttons to click
-            coord[] skeletonData = null;
-            if (kinectPlayerSkeleton != null)
+            if (kinectPlayerSkeleton != null )
             {
-                skeletonData = kinectPlayerSkeleton.GetSkeletalData();
-                if (skeletonData != null)//consider making this encompass more stuff but for lazy's sake dont do it now
-                {
-                    kinectPose.drawPose(SimonPose.Children, kinectPose.GetSimon());
-                    //3 second hover and select for a button
-                    if (skeletonData[(int)KSSJoint.head].x > 0)//should this be here? skeleton data is already not null... so what if the head is 0
-                    {
-                        //kinectPose.drawPose(this.PlayerPose.Children, kinectPose.GetPlayer());
-                        kinectPose.drawPose(this.PlayerPose.Children, skeletonData);
-                        SetEllipsePosition(rightEllipse, skeletonData[(int)KSSJoint.rhand]);
-                    }
-                }
-
-                currHand = new Point(skeletonData[(int)KSSJoint.rhand].x, skeletonData[(int)KSSJoint.rhand].y);
-                currSelectionPosition = currHand;
+                currCursorPosition = game.UseSkeleton( kinectPlayerSkeleton.GetSkeletalData(), ref SimonSaysPoseCanvas, ref PlayerPoseCanvas);
             }
 
             // For mouse support, uncomment the following lines
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
-            currSelectionPosition = currMouse;
+            currCursorPosition = currMouse;
 
             if (highscoreMenu.isHighScoreMenuActive())
             {
-                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currSelectionPosition);
+                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currCursorPosition);
             }
             else
             {
-                MenuButton button = mainMenu.buttonPushed(currSelectionPosition, grid);
+                MenuButton button = mainMenu.buttonPushed(currCursorPosition, grid);
                 switch (button)
                 {
                     case MenuButton.LeftCenter:
@@ -520,16 +496,18 @@ namespace Kinect_Simon_Says
                 else if (mainMenu.hiddenStatus() == "unhiding")
                     mainMenu.unhideMenu();
 
-                game.checkHovers(currSelectionPosition);
                 if (game.getGameMode() == Game.GameMode.Paused)
                 {
                     mainMenu.unhideMenu();
                 }
             }
             playfield.Children.Clear();
+            game.DrawCursor(currCursorPosition, playfield.Children);
+            playfield.Children.Add(Sun);
+            playfield.Children.Add(Island);
             game.DrawFrame(playfield.Children);
-            foreach (var player in players)
-                player.Value.Draw(playfield.Children);
+            //foreach (var player in players)
+            //    player.Value.Draw(playfield.Children);
             BannerText.Draw(playfield.Children);
             //FlyingText.Draw(playfield.Children);
 
@@ -546,7 +524,7 @@ namespace Kinect_Simon_Says
             //kinectHighScores.addHighScore(25, "ar");
             //kinectHighScores.addHighScore(16, "mlh");
             //mainMenu.hideMenu();
-            highscoreMenu.ActivateHighScoreMenu();
+            //highscoreMenu.ActivateHighScoreMenu();
         }
 
 

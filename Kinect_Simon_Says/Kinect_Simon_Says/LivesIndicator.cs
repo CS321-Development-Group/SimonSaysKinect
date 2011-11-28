@@ -12,13 +12,12 @@ namespace Kinect_Simon_Says
     class LivesIndicator : Shape
     {
         const int NUM_OF_WAVES = 10;
-
+        #region Variables
         public static readonly DependencyProperty StartPointXProperty =
             DependencyProperty.Register("StartPointXProperty", typeof(double), typeof(LivesIndicator),
             new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         /// <summary> 
-        /// The radius of this CircleTimer 
         /// </summary> 
         public double StartPointX
         {
@@ -31,7 +30,6 @@ namespace Kinect_Simon_Says
             new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         /// <summary> 
-        /// The radius of this CircleTimer 
         /// </summary> 
         public double EndPointX
         {
@@ -39,29 +37,27 @@ namespace Kinect_Simon_Says
             set { SetValue(EndPointXProperty, value); }
         }
 
-        public static readonly DependencyProperty StartHeightProperty =
-            DependencyProperty.Register("StartHeightProperty", typeof(double), typeof(LivesIndicator),
+        public static readonly DependencyProperty PlayfieldHeightProperty =
+            DependencyProperty.Register("PlayfieldHeightProperty", typeof(double), typeof(LivesIndicator),
             new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         /// <summary> 
-        /// The radius of this CircleTimer 
         /// </summary> 
-        public double StartHeight
+        public double PlayfieldHeight
         {
-            get { return (double)GetValue(StartHeightProperty); }
-            set { SetValue(StartHeightProperty, value); }
+            get { return (double)GetValue(PlayfieldHeightProperty); }
+            set { SetValue(PlayfieldHeightProperty, value); }
         }
-        public static readonly DependencyProperty HeightModifierProperty =
-            DependencyProperty.Register("HeightModifierProperty", typeof(double), typeof(LivesIndicator),
+        public static readonly DependencyProperty RemainingLivesProperty =
+            DependencyProperty.Register("RemainingLivesProperty", typeof(double), typeof(LivesIndicator),
             new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         /// <summary> 
-        /// The radius of this CircleTimer 
         /// </summary> 
-        public double HeightModifier
+        public double RemainingLives
         {
-            get { return (double)GetValue(HeightModifierProperty); }
-            set { SetValue(HeightModifierProperty, value); }
+            get { return (double)GetValue(RemainingLivesProperty); }
+            set { SetValue(RemainingLivesProperty, value); }
         }
         public static readonly DependencyProperty WaveHeightProperty =
             DependencyProperty.Register("WaveHeightProperty", typeof(double), typeof(LivesIndicator),
@@ -69,22 +65,28 @@ namespace Kinect_Simon_Says
 
 
         /// <summary> 
-        /// The radius of this CircleTimer 
         /// </summary> 
         public double WaveHeight
         {
             get { return (double)GetValue(WaveHeightProperty); }
             set { SetValue(WaveHeightProperty, value); }
         }
-        public LivesIndicator(double startPointX, double endPointX, double startHeight, double waveHeight, double heightModifier)
+        #endregion Variables
+
+        public LivesIndicator(double zero, double windowWidth, double windowHeight, double waveHeight, int remainingLives)
         {
-            StartPointX = startPointX;
-            EndPointX = endPointX;
-            StartHeight = startHeight;
-            HeightModifier = heightModifier;
+            StartPointX = zero;
+            EndPointX = windowWidth;
+            PlayfieldHeight = windowHeight;
+            RemainingLives = remainingLives;
             WaveHeight = waveHeight;
-            //Fill = Brushes.DarkGray;
+            Fill = Brushes.DarkBlue;
+            Opacity = .33;
             Stroke = System.Windows.Media.Brushes.Black;
+        }
+        public void UpdateIndicator( int remainingLives )
+        {
+            RemainingLives = remainingLives;
         }
         protected override Geometry DefiningGeometry
         {
@@ -108,18 +110,23 @@ namespace Kinect_Simon_Says
 
         private void DrawGeometry(StreamGeometryContext context)
         {
-            Point StartPoint =  new Point(StartPointX, StartHeight * (Game.STARTING_LIVES - HeightModifier + 1) );
-            Point EndPoint =    new Point(  EndPointX, StartHeight * (Game.STARTING_LIVES - HeightModifier + 1) );
-            Point BottomRight = new Point(EndPointX, StartHeight);
             Size WaveSize = new Size(WaveHeight, WaveHeight);
+            
+            Point StartPoint = new Point(StartPointX, (PlayfieldHeight-50) * (1 / (Game.STARTING_LIVES - RemainingLives + 1)));
+            Point EndPoint = new Point(EndPointX, (PlayfieldHeight-50) * 1/(Game.STARTING_LIVES - RemainingLives + 1));
+            Point BottomRight = new Point(EndPointX, PlayfieldHeight);
+            Point BottomLeft = new Point(StartPointX, PlayfieldHeight);
+            
             Point waveEndPoint = EndPoint;
-            context.BeginFigure(StartPoint, true, false);
-            for (int i = 0; i < NUM_OF_WAVES; i++)
+
+            context.BeginFigure(BottomLeft, true, true);
+            context.LineTo(StartPoint, true, true);
+            for (int i = 1; i <= NUM_OF_WAVES; i++)
             {
                 waveEndPoint.X = ((EndPoint.X - StartPoint.X) * ((double)i / NUM_OF_WAVES));
                 context.ArcTo(waveEndPoint, WaveSize, 0, false, SweepDirection.Counterclockwise, true, true);
             }
-            context.ArcTo(waveEndPoint, WaveSize, 0, false, SweepDirection.Counterclockwise, true, true);
+            context.LineTo(BottomRight, false, true);
 
         }
         public void Draw(UIElementCollection children)

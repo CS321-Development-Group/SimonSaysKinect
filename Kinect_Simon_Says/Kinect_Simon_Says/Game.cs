@@ -307,7 +307,7 @@ namespace Kinect_Simon_Says
         private Rect sceneRect;
 
         private CircleTimer poseTimer = null;
-        const double POSE_TIMER_INCREMENT_PER_FRAME = 1;
+        const double POSE_TIMER_INCREMENT_PER_FRAME = .5;
         private const double CIRCLE_TIMER_WIDTH = 180;
         private const double CIRCLE_TIMER_HEIGHT = 200;
 
@@ -317,7 +317,10 @@ namespace Kinect_Simon_Says
 
         private PauseButton gamePauseButton = null;
         private const double PAUSE_BUTTON_RADIUS = 30;
-        
+
+        private Pose KinectPose = null;
+        Ellipse RightHand;
+
         private Color baseColor = Color.FromRgb(0, 0, 0);
         
         private Dictionary<int, int> scores = new Dictionary<int, int>();
@@ -333,7 +336,9 @@ namespace Kinect_Simon_Says
             poseTimer = new CircleTimer(sceneRect.Width / 2, sceneRect.Height / 2, CIRCLE_TIMER_WIDTH, CIRCLE_TIMER_HEIGHT);
             gamePauseButton = new PauseButton(PAUSE_BUTTON_RADIUS, sceneRect.Width / 2, PAUSE_BUTTON_RADIUS + 2);
             livesRemaining = STARTING_LIVES;
-            Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height / 2, 5, livesRemaining); 
+            Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height, 3, livesRemaining);
+            RightHand = new Ellipse();
+            KinectPose = new Pose();
         }
 
         public void SetFramerate(double actualFramerate)
@@ -437,15 +442,30 @@ namespace Kinect_Simon_Says
         }
         public void checkHovers(Point MousePos)
         {
-            if (gamePauseButton.isPressed(MousePos))
+            if (gameMode == Game.GameMode.Playing)
             {
-                gameMode = Game.GameMode.Paused;
+
+                if (gamePauseButton.isPressed(MousePos))
+                {
+                    gameMode = Game.GameMode.Paused;
+                    if (livesRemaining > 0)
+                        livesRemaining -= 1;
+                }
             }
+        }
+        public void DrawCursor(Point currPos, UIElementCollection children)
+        {
+            RightHand.Height = 20;
+            RightHand.Width = 20;
+            RightHand.Stroke = Brushes.Black;
+            RightHand.Fill = Brushes.White;
+            Canvas.SetLeft(RightHand, currPos.X);
+            Canvas.SetTop(RightHand, currPos.Y);
+            children.Add(RightHand);
         }
         public void DrawFrame(UIElementCollection children)
         {
             frameCount++;
-            children.Add(Water);
             if (this.gameMode == Game.GameMode.Playing)
             {
                 children.Add(gamePauseButton);
@@ -457,6 +477,11 @@ namespace Kinect_Simon_Says
                 else
                 {
                     poseTimer.WedgeAngle = 0;
+                    if (livesRemaining > 0)
+                    {
+                        livesRemaining -= 1;
+                    }
+                    Water.UpdateIndicator(livesRemaining);
                     //Validate Pose
                 }
                 children.Add(poseTimer);
@@ -474,6 +499,7 @@ namespace Kinect_Simon_Says
                         i++;
                     }
                 }
+                children.Add(Water);
             }
             else if (this.gameMode == Game.GameMode.Paused)
             { 
@@ -488,6 +514,19 @@ namespace Kinect_Simon_Says
         public GameMode getGameMode()
         {
             return (this.gameMode);
+        }
+
+        public Point UseSkeleton(coord[] skeletonCoords, ref Canvas SimonSaysPoseCanvas, ref Canvas PlayerPoseCanvas)
+        {
+            if (skeletonCoords != null)
+            {
+                KinectPose.drawPose(SimonSaysPoseCanvas.Children, KinectPose.GetSimon());
+                if (skeletonCoords[(int)KSSJoint.head].x > 0)//this makes a big green blob if it isn't here.. odd
+                {
+                    KinectPose.drawPose(PlayerPoseCanvas.Children, skeletonCoords);
+                }
+            }
+            return (new Point(skeletonCoords[(int)KSSJoint.rhand].x, skeletonCoords[(int)KSSJoint.rhand].y));
         }
     }
 }
