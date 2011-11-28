@@ -13,14 +13,12 @@
             <Path Name="Island" Fill="Beige" Stroke="Black" StrokeThickness="1" Data="M 0,575 L 100,475 L 250, 400 L 500,400 L 650,475 L 750,575" ></Path>
             <Ellipse Name="Sun" Width="50" Height="50" Fill="Yellow" Canvas.Left="635" Canvas.Top="25"/>
         </Canvas>
-       <Canvas Name="SkeltalTracking" Grid.ColumnSpan="2">
-            <Button Canvas.Left="356" Canvas.Top="458" Content="CreatePose" Height="23" Name="CreatePose" Width="75" Click="CreatePose_Click" />
-        </Canvas>
         <Canvas Name="SkeletonImages" Grid.ColumnSpan="2">
-            <Canvas Name="SimonSaysPoseCanvas" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
-            <Canvas Name="PlayerPoseCanvas" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
+            <Canvas Name="SimonSaysPoseCanvas" Panel.ZIndex="48" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
+            <Canvas Name="PlayerPoseCanvas" Panel.ZIndex="49" Height="289" Width="777" Background="{x:Null}" ClipToBounds="True" Canvas.Left="1" Canvas.Top="163"></Canvas>
         </Canvas>
-
+        <Canvas Name="topLayer" Panel.ZIndex="50">
+        </Canvas>
         <!--kt:KinectColorViewer x:Name="kinectViewer" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" /-->
     </Grid>
 

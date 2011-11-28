@@ -314,7 +314,7 @@ namespace Kinect_Simon_Says
         private Rect sceneRect;
 
         private CircleTimer poseTimer = null;
-        const double POSE_TIMER_INCREMENT_PER_FRAME = 2;
+        const double POSE_TIMER_INCREMENT_PER_FRAME = .5;
         private const double CIRCLE_TIMER_WIDTH = 180;
         private const double CIRCLE_TIMER_HEIGHT = 200;
 
@@ -472,7 +472,7 @@ namespace Kinect_Simon_Says
             {
                 if (DoThis)
                 {
-                    AddToScore(1, 10, new Point(300, 600));
+                    AddToScore(1, 10, new Point(300, 400));
                     currPoseNum++;
                     KinectPose.SetSimon(KinectPose.GetNewPose(currPoseNum));
                     poseTimer.WedgeAngle = 0;

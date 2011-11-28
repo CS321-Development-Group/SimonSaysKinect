@@ -136,6 +136,7 @@ namespace Kinect_Simon_Says
         {
             _element.Remove(LeaderBoardCanvas);
             LeaderBoardCanvas.Children.Clear();
+            LeaderBoardCanvas.TranslatePoint(new Point(300, 400), LeaderBoardCanvas);
             LeaderBoardCanvas.Children.Add(lbRectangle);
             LeaderBoardCanvas.Children.Add(LeaderBoardHeader);
             LeaderBoardCanvas.Children.Add(lbline);

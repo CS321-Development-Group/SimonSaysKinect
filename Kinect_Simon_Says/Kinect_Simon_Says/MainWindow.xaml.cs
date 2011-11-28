@@ -457,6 +457,7 @@ namespace Kinect_Simon_Says
             // For mouse support, uncomment the following lines
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
             currCursorPosition = currMouse;
+            
             game.checkHovers(currCursorPosition, this.grid);
 
             playfield.Children.Clear();
@@ -464,7 +465,8 @@ namespace Kinect_Simon_Says
             playfield.Children.Add(Island);
             game.DrawFrame(playfield.Children, this.grid, currCursorPosition);
             BannerText.Draw(playfield.Children);
-            game.DrawCursor(currCursorPosition, playfield.Children);
+            topLayer.Children.Clear();
+            game.DrawCursor(currCursorPosition, topLayer.Children);
         }
         #endregion GameTimer/Thread
 
