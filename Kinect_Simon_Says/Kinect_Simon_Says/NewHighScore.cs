@@ -22,6 +22,8 @@ namespace Kinect_Simon_Says
         System.Windows.Controls.Button btnBack;
         System.Windows.Controls.Button btnDone;
         string initials;
+        int backtimer;
+        int donetimer;
 
         public NewHighScore(UIElementCollection _gridChildren)
         {
@@ -119,6 +121,9 @@ namespace Kinect_Simon_Says
             _gridChildren.Add(highscoreCanvas);
             initials = "";
             btnBack.IsEnabled = false;
+            backtimer = 0;
+            donetimer = 0;
+            
         }
 
         public bool isHighScoreMenuActive()
@@ -162,8 +167,45 @@ namespace Kinect_Simon_Says
             MenuButtonLocation button;
             //highscoreCanvas.Visibility = Visibility.Visible;
             draw();
+            Point btnBackPoint = highscoreCanvas.TranslatePoint(new Point(6, 178), _grid);
+            Point btnDonePoint = highscoreCanvas.TranslatePoint(new Point(459, 178), _grid);
             //check if back or done is pushed
-                    
+            if (_currCursor.X >= btnBackPoint.X && _currCursor.X <= (btnBackPoint.X + 135) &&
+                _currCursor.Y >= btnBackPoint.Y && _currCursor.Y <= (btnBackPoint.Y + 41) &&
+                btnBack.IsEnabled)
+            {
+                if (backtimer == 100)
+                {
+                    Hide(atoe);
+                    Hide(ftoj);
+                    Hide(ktoo);
+                    Hide(ptot);
+                    Hide(utoz);
+                    btnBack.IsEnabled = false;
+                }
+                else
+                {
+                    backtimer = backtimer + 1;
+                }
+            }
+            else if (_currCursor.X >= btnDonePoint.X && _currCursor.X <= (btnDonePoint.X + 135) &&
+                     _currCursor.Y >= btnDonePoint.Y && _currCursor.Y <= (btnDonePoint.Y + 41) &&
+                     btnDone.IsEnabled)
+            {
+                if (donetimer == 100)
+                {
+                    Hide(allLetters);
+                }
+                else
+                {
+                    donetimer = donetimer + 1;
+                }
+            }
+            else
+            {
+                backtimer = 0;
+                donetimer = 0;
+            }
             if (utoz.hiddenStatus() == "unhidden")
             {
                 button = utoz.buttonPushed(_currCursor, _grid);
