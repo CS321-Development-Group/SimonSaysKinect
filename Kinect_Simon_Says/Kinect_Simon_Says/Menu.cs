@@ -8,7 +8,7 @@ using Microsoft.Research.Kinect.Nui;
 
 namespace Kinect_Simon_Says
 {
-    public enum MenuButton
+    public enum MenuButtonLocation
     {
         Left,
         LeftCenter,
@@ -165,19 +165,17 @@ namespace Kinect_Simon_Says
                 menu.Tag = "unhidden";
             draw();
         }
-        public MenuButton buttonPushed(Point _currPoint, UIElement _grid)
+        public MenuButtonLocation buttonPushed(Point _currPoint, UIElement _grid)
         {
             double dist;
             double sideA;
             double sideB;
             Point pntButton;
-            MenuButton mnuButton = MenuButton.None;
+            MenuButtonLocation mnuButton = MenuButtonLocation.None;
             bool isButtonPushed = false;
 
             if (menu.IsEnabled)
             {
-                if (_currPoint.Y <= 150)
-                {
                     for (int i = 0; i < menu.Children.Count; i++)
                     {
                         pntButton = menu.Children[i].TranslatePoint(new Point(62.5, 47.5), _grid);
@@ -186,24 +184,23 @@ namespace Kinect_Simon_Says
                         dist = Math.Sqrt(sideA * sideA + sideB * sideB);
                         if (dist <= 62.5)
                         {
-                            mnuButton = (MenuButton)i;
+                            mnuButton = (MenuButtonLocation)i;
                             isButtonPushed = activateButton(mnuButton);
                             i = menu.Children.Count + 1;
                         }
                     }
-                }
-                if (mnuButton == MenuButton.None)
+                if (mnuButton == MenuButtonLocation.None)
                 {
                     deactivateButtons();
                 }
                 else if(!isButtonPushed)
                 {
-                    mnuButton = MenuButton.None;
+                    mnuButton = MenuButtonLocation.None;
                 }
             }
             return mnuButton;
         }
-        private bool activateButton(MenuButton _button)
+        private bool activateButton(MenuButtonLocation _button)
         {
             bool retval = false;
             Canvas _canvas = (Canvas)menu.Children[(int)_button];
@@ -214,9 +211,9 @@ namespace Kinect_Simon_Says
                 myBrush = (LinearGradientBrush)element.Fill;
                 double dblOffset;
                 dblOffset = myBrush.GradientStops[1].Offset;
-                if (dblOffset >= .01)
+                if (dblOffset >= .0001)
                 {
-                    dblOffset = dblOffset - 0.01;
+                    dblOffset = dblOffset - 0.025;
                     myBrush.GradientStops.Clear();
                     myBrush.GradientStops.Add(new GradientStop(Colors.LightGray, 0));
                     myBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, dblOffset));
@@ -224,19 +221,19 @@ namespace Kinect_Simon_Says
 
                     switch (_button)
                     {
-                        case MenuButton.Left:
+                        case MenuButtonLocation.Left:
                             left.Children[0] = element;
                             break;
-                        case MenuButton.LeftCenter:
+                        case MenuButtonLocation.LeftCenter:
                             leftcenter.Children[0] = element;
                             break;
-                        case MenuButton.Center:
+                        case MenuButtonLocation.Center:
                             center.Children[0] = element;
                             break;
-                        case MenuButton.RightCenter:
+                        case MenuButtonLocation.RightCenter:
                             rightcenter.Children[0] = element;
                             break;
-                        case MenuButton.Right:
+                        case MenuButtonLocation.Right:
                             right.Children[0] = element;
                             break;
                     }
@@ -253,11 +250,11 @@ namespace Kinect_Simon_Says
             Polygon element;
             Canvas submenu;
             LinearGradientBrush myBrush;
-            MenuButton _button;
+            MenuButtonLocation _button;
 
             for (int i = 0; i < menu.Children.Count; i++)
             {
-                _button = (MenuButton)i;
+                _button = (MenuButtonLocation)i;
                 submenu = (Canvas)menu.Children[i];
                 if (submenu.Children.Count > 0)
                 {
@@ -275,19 +272,19 @@ namespace Kinect_Simon_Says
 
                         switch (_button)
                         {
-                            case MenuButton.Left:
+                            case MenuButtonLocation.Left:
                                 left.Children[0] = element;
                                 break;
-                            case MenuButton.LeftCenter:
+                            case MenuButtonLocation.LeftCenter:
                                 leftcenter.Children[0] = element;
                                 break;
-                            case MenuButton.Center:
+                            case MenuButtonLocation.Center:
                                 center.Children[0] = element;
                                 break;
-                            case MenuButton.RightCenter:
+                            case MenuButtonLocation.RightCenter:
                                 rightcenter.Children[0] = element;
                                 break;
-                            case MenuButton.Right:
+                            case MenuButtonLocation.Right:
                                 right.Children[0] = element;
                                 break;
                         }
@@ -303,11 +300,11 @@ namespace Kinect_Simon_Says
             Polygon element;
             Canvas submenu;
             LinearGradientBrush myBrush;
-            MenuButton _button;
+            MenuButtonLocation _button;
 
             for (int i = 0; i < menu.Children.Count; i++)
             {
-                _button = (MenuButton)i;
+                _button = (MenuButtonLocation)i;
                 submenu = (Canvas)menu.Children[i];
                 if (submenu.Children.Count > 0)
                 {
@@ -324,19 +321,19 @@ namespace Kinect_Simon_Says
 
                         switch (_button)
                         {
-                            case MenuButton.Left:
+                            case MenuButtonLocation.Left:
                                 left.Children[0] = element;
                                 break;
-                            case MenuButton.LeftCenter:
+                            case MenuButtonLocation.LeftCenter:
                                 leftcenter.Children[0] = element;
                                 break;
-                            case MenuButton.Center:
+                            case MenuButtonLocation.Center:
                                 center.Children[0] = element;
                                 break;
-                            case MenuButton.RightCenter:
+                            case MenuButtonLocation.RightCenter:
                                 rightcenter.Children[0] = element;
                                 break;
-                            case MenuButton.Right:
+                            case MenuButtonLocation.Right:
                                 right.Children[0] = element;
                                 break;
                         }
@@ -345,31 +342,31 @@ namespace Kinect_Simon_Says
                 }
             }
         }
-        public void addButton(Button _element, MenuButton _button)
+        public void addButton(Button _element, MenuButtonLocation _button)
         {
             switch (_button)
             {
-                case MenuButton.Left:
+                case MenuButtonLocation.Left:
                     left.Children.Clear();
                     left.Children.Add(_element.plyButton);
                     left.Children.Add(_element.lblButton);
                     break;
-                case MenuButton.LeftCenter:
+                case MenuButtonLocation.LeftCenter:
                     leftcenter.Children.Clear();
                     leftcenter.Children.Add(_element.plyButton);
                     leftcenter.Children.Add(_element.lblButton);
                     break;
-                case MenuButton.Center:
+                case MenuButtonLocation.Center:
                     center.Children.Clear();
                     center.Children.Add(_element.plyButton);
                     center.Children.Add(_element.lblButton);
                     break;
-                case MenuButton.RightCenter:
+                case MenuButtonLocation.RightCenter:
                     rightcenter.Children.Clear();
                     rightcenter.Children.Add(_element.plyButton);
                     rightcenter.Children.Add(_element.lblButton);
                     break;
-                case MenuButton.Right:
+                case MenuButtonLocation.Right:
                     right.Children.Clear();
                     right.Children.Add(_element.plyButton);
                     right.Children.Add(_element.lblButton);

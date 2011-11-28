@@ -296,7 +296,9 @@ namespace Kinect_Simon_Says
         {
             Off = 0,
             Paused = 1,
-            Playing = 2
+            Playing = 2,
+            Ending = 3,
+            Close = 4
         }
         #region Variables
         private double targetFrameRate = 60;
@@ -321,6 +323,12 @@ namespace Kinect_Simon_Says
         private Pose KinectPose = null;
         Ellipse RightHand;
 
+        NewHighScore highscoreMenu;
+        HighScores kinectHighScores;
+        Menu mainMenu;
+        LeaderBoard kssLeaderBoard;
+
+
         private Color baseColor = Color.FromRgb(0, 0, 0);
         
         private Dictionary<int, int> scores = new Dictionary<int, int>();
@@ -328,7 +336,7 @@ namespace Kinect_Simon_Says
         private DateTime gameStartTime;
         #endregion Variables
 
-        public Game( double framerate, int intraFrames, Rect _sceneRect)
+        public Game( double framerate, int intraFrames, Rect _sceneRect, Grid grid)
         {
             this.intraFrames = intraFrames;
             this.targetFrameRate = framerate * intraFrames;
@@ -339,6 +347,14 @@ namespace Kinect_Simon_Says
             Water = new LivesIndicator(0, sceneRect.Width, sceneRect.Height, 3, livesRemaining);
             RightHand = new Ellipse();
             KinectPose = new Pose();
+            highscoreMenu = new NewHighScore(grid.Children);
+            kinectHighScores = new HighScores();
+            mainMenu = new Menu(grid.Children, "mainMenu");
+            mainMenu.addButton(new Button("Exit"), MenuButtonLocation.LeftCenter);
+            mainMenu.addButton(new Button("Start"), MenuButtonLocation.Center);
+            mainMenu.addButton(new Button("Leaderboard"), MenuButtonLocation.RightCenter);            
+            mainMenu.draw();
+            kssLeaderBoard = new LeaderBoard();
         }
 
         public void SetFramerate(double actualFramerate)
@@ -439,39 +455,56 @@ namespace Kinect_Simon_Says
 
         public void AdvanceFrame()
         {
+
         }
-        public void checkHovers(Point MousePos)
+        public void checkHovers(Point MousePos, Grid grid)
         {
             if (gameMode == Game.GameMode.Playing)
             {
-
                 if (gamePauseButton.isPressed(MousePos))
                 {
                     gameMode = Game.GameMode.Paused;
-                    if (livesRemaining > 0)
-                        livesRemaining -= 1;
+                }
+            }
+            else if (gameMode == Game.GameMode.Off || gameMode == Game.GameMode.Paused)
+            {
+                MenuButtonLocation button = mainMenu.buttonPushed(MousePos, grid);
+                switch (button)
+                {
+                    case MenuButtonLocation.LeftCenter:
+                        gameMode = Game.GameMode.Close;
+                        break;
+                    case MenuButtonLocation.Center:
+                        mainMenu.hideMenu();
+                        gameMode = Game.GameMode.Playing;
+                        break;
+                    case MenuButtonLocation.RightCenter:
+                        kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
+                        kssLeaderBoard.draw(grid.Children);
+                        kssLeaderBoard.showLeaderBoard();
+                        break;
                 }
             }
         }
         public void DrawCursor(Point currPos, UIElementCollection children)
         {
-            RightHand.Height = 20;
-            RightHand.Width = 20;
+            RightHand.Height = 15;
+            RightHand.Width = 15;
             RightHand.Stroke = Brushes.Black;
             RightHand.Fill = Brushes.White;
             Canvas.SetLeft(RightHand, currPos.X);
             Canvas.SetTop(RightHand, currPos.Y);
             children.Add(RightHand);
         }
-        public void DrawFrame(UIElementCollection children)
+        public void DrawFrame(UIElementCollection children, Grid grid, Point currPos)
         {
             frameCount++;
-            if (this.gameMode == Game.GameMode.Playing)
+            if (gameMode == Game.GameMode.Playing)
             {
+                mainMenu.hideMenu();
                 children.Add(gamePauseButton);
 
-                if (poseTimer.WedgeAngle < 360)
-                {
+                if (poseTimer.WedgeAngle < 360){
                     poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
                 }
                 else
@@ -480,12 +513,14 @@ namespace Kinect_Simon_Says
                     if (livesRemaining > 0)
                     {
                         livesRemaining -= 1;
+                        Water.UpdateIndicator(livesRemaining);
                     }
-                    Water.UpdateIndicator(livesRemaining);
-                    //Validate Pose
+                    else
+                    {
+                        gameMode = GameMode.Off;
+                    }
                 }
                 children.Add(poseTimer);
-
                 if (scores.Count != 0)
                 {
                     int i = 0;
@@ -502,12 +537,17 @@ namespace Kinect_Simon_Says
                 children.Add(Water);
             }
             else if (this.gameMode == Game.GameMode.Paused)
-            { 
-                
+            {
+                children.Add(poseTimer);
+                mainMenu.unhideMenu();
             }
             else if (this.gameMode == Game.GameMode.Off)
             {
-
+                mainMenu.unhideMenu();
+            }
+            else if (this.gameMode == Game.GameMode.Ending)
+            {
+                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currPos);
             }
         }
 

@@ -70,41 +70,41 @@ namespace Kinect_Simon_Says
             ptot = new Menu(highscoreCanvas.Children, "PtoT");
             utoz = new Menu(highscoreCanvas.Children, "UtoZ");
 
-            allLetters.addButton(new Button("A - E"), MenuButton.Left);
-            allLetters.addButton(new Button("F - J"), MenuButton.LeftCenter);
-            allLetters.addButton(new Button("K - O"), MenuButton.Center);
-            allLetters.addButton(new Button("P - T"), MenuButton.RightCenter);
-            allLetters.addButton(new Button("U - Z"), MenuButton.Right);
+            allLetters.addButton(new Button("A - E"), MenuButtonLocation.Left);
+            allLetters.addButton(new Button("F - J"), MenuButtonLocation.LeftCenter);
+            allLetters.addButton(new Button("K - O"), MenuButtonLocation.Center);
+            allLetters.addButton(new Button("P - T"), MenuButtonLocation.RightCenter);
+            allLetters.addButton(new Button("U - Z"), MenuButtonLocation.Right);
 
-            atoe.addButton(new Button("A"), MenuButton.Left);
-            atoe.addButton(new Button("B"), MenuButton.LeftCenter);
-            atoe.addButton(new Button("C"), MenuButton.Center);
-            atoe.addButton(new Button("D"), MenuButton.RightCenter);
-            atoe.addButton(new Button("E"), MenuButton.Right);
+            atoe.addButton(new Button("A"), MenuButtonLocation.Left);
+            atoe.addButton(new Button("B"), MenuButtonLocation.LeftCenter);
+            atoe.addButton(new Button("C"), MenuButtonLocation.Center);
+            atoe.addButton(new Button("D"), MenuButtonLocation.RightCenter);
+            atoe.addButton(new Button("E"), MenuButtonLocation.Right);
 
-            ftoj.addButton(new Button("F"), MenuButton.Left);
-            ftoj.addButton(new Button("G"), MenuButton.LeftCenter);
-            ftoj.addButton(new Button("H"), MenuButton.Center);
-            ftoj.addButton(new Button("I"), MenuButton.RightCenter);
-            ftoj.addButton(new Button("J"), MenuButton.Right);
+            ftoj.addButton(new Button("F"), MenuButtonLocation.Left);
+            ftoj.addButton(new Button("G"), MenuButtonLocation.LeftCenter);
+            ftoj.addButton(new Button("H"), MenuButtonLocation.Center);
+            ftoj.addButton(new Button("I"), MenuButtonLocation.RightCenter);
+            ftoj.addButton(new Button("J"), MenuButtonLocation.Right);
 
-            ktoo.addButton(new Button("K"), MenuButton.Left);
-            ktoo.addButton(new Button("L"), MenuButton.LeftCenter);
-            ktoo.addButton(new Button("M"), MenuButton.Center);
-            ktoo.addButton(new Button("N"), MenuButton.RightCenter);
-            ktoo.addButton(new Button("O"), MenuButton.Right);
+            ktoo.addButton(new Button("K"), MenuButtonLocation.Left);
+            ktoo.addButton(new Button("L"), MenuButtonLocation.LeftCenter);
+            ktoo.addButton(new Button("M"), MenuButtonLocation.Center);
+            ktoo.addButton(new Button("N"), MenuButtonLocation.RightCenter);
+            ktoo.addButton(new Button("O"), MenuButtonLocation.Right);
 
-            ptot.addButton(new Button("P"), MenuButton.Left);
-            ptot.addButton(new Button("Q"), MenuButton.LeftCenter);
-            ptot.addButton(new Button("R"), MenuButton.Center);
-            ptot.addButton(new Button("S"), MenuButton.RightCenter);
-            ptot.addButton(new Button("T"), MenuButton.Right);
+            ptot.addButton(new Button("P"), MenuButtonLocation.Left);
+            ptot.addButton(new Button("Q"), MenuButtonLocation.LeftCenter);
+            ptot.addButton(new Button("R"), MenuButtonLocation.Center);
+            ptot.addButton(new Button("S"), MenuButtonLocation.RightCenter);
+            ptot.addButton(new Button("T"), MenuButtonLocation.Right);
 
-            utoz.addButton(new Button("U"), MenuButton.Left);
-            utoz.addButton(new Button("V"), MenuButton.LeftCenter);
-            utoz.addButton(new Button("W"), MenuButton.Center);
-            utoz.addButton(new Button("Y"), MenuButton.RightCenter);
-            utoz.addButton(new Button("Z"), MenuButton.Right);
+            utoz.addButton(new Button("U"), MenuButtonLocation.Left);
+            utoz.addButton(new Button("V"), MenuButtonLocation.LeftCenter);
+            utoz.addButton(new Button("W"), MenuButtonLocation.Center);
+            utoz.addButton(new Button("Y"), MenuButtonLocation.RightCenter);
+            utoz.addButton(new Button("Z"), MenuButtonLocation.Right);
 
             highscoreCanvas.Visibility = Visibility.Hidden;
             draw();
@@ -159,7 +159,7 @@ namespace Kinect_Simon_Says
         public void inputHighScore(HighScores _currHighScores, int _score, UIElement _grid, Point _currCursor)
         {
             //UnHide(allLetters);
-            MenuButton button;
+            MenuButtonLocation button;
             //highscoreCanvas.Visibility = Visibility.Visible;
             draw();
             //check if back or done is pushed
@@ -169,23 +169,23 @@ namespace Kinect_Simon_Says
                 button = utoz.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         initials = initials + "U";
                         buttonPushed(utoz);
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         initials = initials + "V";
                         buttonPushed(utoz);
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         initials = initials + "W";
                         buttonPushed(utoz);
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         initials = initials + "Y";
                         buttonPushed(utoz);
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         initials = initials + "Z";
                         buttonPushed(utoz);
                         break;
@@ -196,23 +196,23 @@ namespace Kinect_Simon_Says
                 button = ptot.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         initials = initials + "P";
                         buttonPushed(ptot);
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         initials = initials + "Q";
                         buttonPushed(ptot);
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         initials = initials + "R";
                         buttonPushed(ptot);
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         initials = initials + "S";
                         buttonPushed(ptot);
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         initials = initials + "T";
                         buttonPushed(ptot);
                         break;
@@ -223,23 +223,23 @@ namespace Kinect_Simon_Says
                 button = ktoo.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         initials = initials + "K";
                         buttonPushed(ktoo);
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         initials = initials + "L";
                         buttonPushed(ktoo);
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         initials = initials + "M";
                         buttonPushed(ktoo);
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         initials = initials + "N";
                         buttonPushed(ktoo);
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         initials = initials + "O";
                         buttonPushed(ktoo);
                         break;
@@ -250,23 +250,23 @@ namespace Kinect_Simon_Says
                 button = ftoj.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         initials = initials + "F";
                         buttonPushed(ftoj);
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         initials = initials + "G";
                         buttonPushed(ftoj);
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         initials = initials + "H";
                         buttonPushed(ftoj);
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         initials = initials + "I";
                         buttonPushed(ftoj);
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         initials = initials + "J";
                         buttonPushed(ftoj);
                         break;
@@ -277,23 +277,23 @@ namespace Kinect_Simon_Says
                 button = atoe.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         initials = initials + "A";
                         buttonPushed(atoe);
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         initials = initials + "B";
                         buttonPushed(atoe);
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         initials = initials + "C";
                         buttonPushed(atoe);
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         initials = initials + "D";
                         buttonPushed(atoe);
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         initials = initials + "E";
                         buttonPushed(atoe);
                         break;
@@ -304,31 +304,31 @@ namespace Kinect_Simon_Says
                 button = allLetters.buttonPushed(_currCursor, _grid);
                 switch (button)
                 {
-                    case MenuButton.Left:
+                    case MenuButtonLocation.Left:
                         //atoe.unhideMenu();
                         allLetters.deactivateButton();
                         UnHide(atoe);
                         btnBack.IsEnabled = true;
                         break;
-                    case MenuButton.LeftCenter:
+                    case MenuButtonLocation.LeftCenter:
                         //ftoj.unhideMenu();
                         allLetters.deactivateButton();
                         UnHide(ftoj);
                         btnBack.IsEnabled = true;
                         break;
-                    case MenuButton.Center:
+                    case MenuButtonLocation.Center:
                         //ktoo.unhideMenu();
                         allLetters.deactivateButton();
                         UnHide(ktoo);
                         btnBack.IsEnabled = true;
                         break;
-                    case MenuButton.RightCenter:
+                    case MenuButtonLocation.RightCenter:
                         //ptot.unhideMenu();
                         allLetters.deactivateButton();
                         UnHide(ptot);
                         btnBack.IsEnabled = true;
                         break;
-                    case MenuButton.Right:
+                    case MenuButtonLocation.Right:
                         //utoz.unhideMenu();
                         allLetters.deactivateButton();
                         UnHide(utoz);

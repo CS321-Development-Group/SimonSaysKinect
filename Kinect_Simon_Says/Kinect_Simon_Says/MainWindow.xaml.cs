@@ -91,7 +91,7 @@ namespace Kinect_Simon_Says
             sound.Open(new Uri(".\\audio\\Welcome.wav", UriKind.RelativeOrAbsolute));
 
             UpdatePlayfieldSize();
-            game = new Game(targetFramerate, NumIntraFrames, screenRect);
+            game = new Game(targetFramerate, NumIntraFrames, screenRect, grid);
             game.SetGameMode(Game.GameMode.Off);
 
             KinectStart();
@@ -100,17 +100,6 @@ namespace Kinect_Simon_Says
             gameThread.SetApartmentState(ApartmentState.STA);
             gameThread.Start();
 
-            mainMenu = new Menu(grid.Children, "mainMenu");
-            mainMenu.addButton(new Button("Exit"), MenuButton.LeftCenter);
-            mainMenu.addButton(new Button("Start"), MenuButton.Center);
-            mainMenu.addButton(new Button("Leaderboard"), MenuButton.RightCenter);            
-            mainMenu.draw();
-
-            highscoreMenu = new NewHighScore(grid.Children);
-  
-            kinectHighScores = new HighScores();
-            kssLeaderBoard = new LeaderBoard();
-            kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
             sound.Play();
         }
         /// <summary>
@@ -468,50 +457,14 @@ namespace Kinect_Simon_Says
             // For mouse support, uncomment the following lines
             Point currMouse = System.Windows.Input.Mouse.GetPosition(grid);
             currCursorPosition = currMouse;
+            game.checkHovers(currCursorPosition, this.grid);
 
-            if (highscoreMenu.isHighScoreMenuActive())
-            {
-                highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currCursorPosition);
-            }
-            else
-            {
-                MenuButton button = mainMenu.buttonPushed(currCursorPosition, grid);
-                switch (button)
-                {
-                    case MenuButton.LeftCenter:
-                        this.Close();
-                        break;
-                    case MenuButton.Center:
-                        mainMenu.hideMenu();
-                        game.SetGameMode(Game.GameMode.Playing);
-                        break;
-                    case MenuButton.RightCenter:
-                        kssLeaderBoard.fillLeaderBoard(kinectHighScores.getHighScores());
-                        kssLeaderBoard.draw(grid.Children);
-                        kssLeaderBoard.showLeaderBoard();
-                        break;
-                }
-                if (mainMenu.hiddenStatus() == "hiding")
-                    mainMenu.hideMenu();
-                else if (mainMenu.hiddenStatus() == "unhiding")
-                    mainMenu.unhideMenu();
-
-                if (game.getGameMode() == Game.GameMode.Paused)
-                {
-                    mainMenu.unhideMenu();
-                }
-            }
             playfield.Children.Clear();
             game.DrawCursor(currCursorPosition, playfield.Children);
             playfield.Children.Add(Sun);
             playfield.Children.Add(Island);
-            game.DrawFrame(playfield.Children);
-            //foreach (var player in players)
-            //    player.Value.Draw(playfield.Children);
+            game.DrawFrame(playfield.Children, this.grid, currCursorPosition);
             BannerText.Draw(playfield.Children);
-            //FlyingText.Draw(playfield.Children);
-
-            //CheckPlayers();
         }
         #endregion GameTimer/Thread
 
