@@ -62,16 +62,38 @@ namespace Kinect_Simon_Says
             CenterX = xPos;
             CenterY = yPos;
 
-            //LinearGradientBrush myFillBrush = new LinearGradientBrush();
-            //myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 0));
-            //myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, 2));
-            //myFillBrush.StartPoint = new Point(0, 0);
-            //myFillBrush.EndPoint = new Point(0, 1);
             Fill = Brushes.DarkGray;
+
             Stroke = System.Windows.Media.Brushes.Black;
             StrokeThickness = Radius/8;
-            //Fill = myFillBrush;
+        }
+        public bool isPressed(Point mousePos)
+        {
+            LinearGradientBrush myFillBrush = new LinearGradientBrush();
+            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 1));
+            myFillBrush.GradientStops.Add(new GradientStop(Colors.DarkGreen, timer / MAX_TIMER));
+            myFillBrush.StartPoint = new Point(0, 0);
+            myFillBrush.EndPoint = new Point(0, 1);
+            Fill = myFillBrush;
 
+            const int INCREMENT = 2;
+            if (mousePos.Y > CenterY - Radius && mousePos.Y < CenterY + Radius)
+            {
+                if (mousePos.X > CenterX - Radius && mousePos.X < CenterX + Radius)
+                {
+                    timer = timer + INCREMENT * 2;//we always subtract an increment so increment * 2 is actually 1 increment
+                }
+            }
+            if (timer > 0)
+            {
+                timer = timer - INCREMENT;
+            }
+            if (timer >= MAX_TIMER)
+            {
+                timer = 0;
+                return true;
+            }
+            return false;
         }
         protected override Geometry DefiningGeometry
         {
@@ -91,27 +113,6 @@ namespace Kinect_Simon_Says
 
                 return geometry;
             }
-        }
-        public bool isPressed(Point mousePos)
-        {
-            const int INCREMENT = 2;
-            if (mousePos.Y > CenterY - Radius && mousePos.Y < CenterY + Radius)
-            {
-                if (mousePos.X > CenterX - Radius && mousePos.X < CenterX + Radius)
-                {
-                    timer = timer + INCREMENT * 2;//we always subtract an increment so increment * 2 is actually 1 increment
-                }
-            }
-            if (timer > 0)
-            {
-                timer = timer - INCREMENT;
-            }
-            if (timer >= MAX_TIMER)
-            {
-                timer = 0;
-                return true;
-            }
-            return false;
         }
         public void DrawGeometry(StreamGeometryContext context)
         {

@@ -309,7 +309,7 @@ namespace Kinect_Simon_Says
         private Rect sceneRect;
 
         private CircleTimer poseTimer = null;
-        const double POSE_TIMER_INCREMENT_PER_FRAME = .5;
+        const double POSE_TIMER_INCREMENT_PER_FRAME = 2;
         private const double CIRCLE_TIMER_WIDTH = 180;
         private const double CIRCLE_TIMER_HEIGHT = 200;
 
@@ -502,7 +502,6 @@ namespace Kinect_Simon_Says
             if (gameMode == Game.GameMode.Playing)
             {
                 mainMenu.hideMenu();
-                children.Add(gamePauseButton);
 
                 if (poseTimer.WedgeAngle < 360){
                     poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
@@ -510,17 +509,18 @@ namespace Kinect_Simon_Says
                 else
                 {
                     poseTimer.WedgeAngle = 0;
-                    if (livesRemaining > 0)
+                    if (livesRemaining > 1)
                     {
                         livesRemaining -= 1;
                         Water.UpdateIndicator(livesRemaining);
                     }
                     else
                     {
-                        gameMode = GameMode.Off;
+                        livesRemaining -= 1;
+                        Water.UpdateIndicator(livesRemaining);
+                        gameMode = GameMode.Ending;
                     }
                 }
-                children.Add(poseTimer);
                 if (scores.Count != 0)
                 {
                     int i = 0;
@@ -534,10 +534,13 @@ namespace Kinect_Simon_Says
                         i++;
                     }
                 }
+                children.Add(gamePauseButton);
+                children.Add(poseTimer);
                 children.Add(Water);
             }
             else if (this.gameMode == Game.GameMode.Paused)
             {
+                children.Add(Water);
                 children.Add(poseTimer);
                 mainMenu.unhideMenu();
             }
