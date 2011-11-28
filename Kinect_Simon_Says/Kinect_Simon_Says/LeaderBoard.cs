@@ -43,7 +43,7 @@ namespace Kinect_Simon_Says
 
             LeaderBoardCanvas.Width = 200;
             LeaderBoardCanvas.Height = 342;
-            LeaderBoardCanvas.Margin = new Thickness(0,75,0,0);
+            LeaderBoardCanvas.Margin = new Thickness(0,0,0,0);
             LeaderBoardCanvas.HorizontalAlignment = HorizontalAlignment.Center;
             LeaderBoardCanvas.VerticalAlignment = VerticalAlignment.Top;
 
@@ -90,7 +90,7 @@ namespace Kinect_Simon_Says
                 LBList[i].lbScore.Background = transparent;
                 LBList[i].lbScore.Margin = scoremargin;
                 LBList[i].lbScore.VerticalContentAlignment = VerticalAlignment.Center;
-                LBList[i].lbScore.HorizontalContentAlignment = HorizontalAlignment.Right;
+                //LBList[i].lbScore.HorizontalContentAlignment = HorizontalAlignment.Right;
                 top = top + 25;
             }
             lbButton = new System.Windows.Controls.Button();
@@ -115,7 +115,7 @@ namespace Kinect_Simon_Says
         }
         public bool OK_Button_Hover(Point CursorPos)
         {
-            if (CursorPos.X >= 312 && CursorPos.X <= 487 && CursorPos.Y >= 460 && CursorPos.Y <= 490)
+            if (CursorPos.X >= 312 && CursorPos.X <= 487 && CursorPos.Y >= 300 && CursorPos.Y <= 330)
             {
                 if (leaderboardTimer > 50)
                 {

@@ -492,7 +492,7 @@ namespace Kinect_Simon_Says
                     gameMode = Game.GameMode.Paused;
                 }
             }
-            else if (gameMode == Game.GameMode.Off || gameMode == Game.GameMode.Paused)
+            else if (gameMode == Game.GameMode.Off)
             {
                 MenuButtonLocation button = mainMenu.buttonPushed(MousePos, grid);
                 switch (button)
@@ -510,6 +510,36 @@ namespace Kinect_Simon_Says
                         gameMode = Game.GameMode.LdrBoard;
                         break;
                 }
+            }
+            else if (gameMode == Game.GameMode.Paused)
+            { 
+                MenuButtonLocation button = mainMenu.buttonPushed(MousePos, grid);
+                switch (button)
+                {
+                    case MenuButtonLocation.LeftCenter:
+                        gameMode = Game.GameMode.Close;
+                        break;
+                    case MenuButtonLocation.Center:
+                        mainMenu.hideMenu();
+                        gameMode = Game.GameMode.Playing;
+                        if (DoThis)
+                        {
+                            SimonSays.Stop();
+                            SimonSays.Play();
+                        }
+                        else
+                        {
+                            SimonDoesnt.Stop();
+                            SimonDoesnt.Play();
+                        }
+
+                        break;
+                    case MenuButtonLocation.RightCenter:
+                        kssLeaderBoard.unhide();
+                        gameMode = Game.GameMode.LdrBoard;
+                        break;
+                }
+
             }
             if (gameMode == GameMode.LdrBoard)
             {
@@ -537,7 +567,8 @@ namespace Kinect_Simon_Says
             {
                 mainMenu.hideMenu();
 
-                if (poseTimer.WedgeAngle < 360){
+                if (poseTimer.WedgeAngle < 360)
+                {
                     poseTimer.WedgeAngle += POSE_TIMER_INCREMENT_PER_FRAME;
                 }
                 else
@@ -578,17 +609,20 @@ namespace Kinect_Simon_Says
             }
             else if (this.gameMode == Game.GameMode.Ending)
             {
+                mainMenu.hideMenu();
                 GameOver.Play();
                 if (scores.Count > 0)
                 {
                     foreach (var score in scores)
                     {
                         if (kinectHighScores.isHighScore(score.Value))
-                        highscoreMenu.ActivateHighScoreMenu();
+                        {
+                            highscoreMenu.ActivateHighScoreMenu();
+                            highscoreMenu.inputHighScore(kinectHighScores, score.Value, grid, currPos);
+                            gameMode = Game.GameMode.Off;
+                        }
                     }
                 }
-                //highscoreMenu.inputHighScore(kinectHighScores, 50, grid, currPos);
-                gameMode = Game.GameMode.Off;
             }
         }
 
@@ -618,13 +652,13 @@ namespace Kinect_Simon_Says
             poseTimer.WedgeAngle = 0;
             if (DoThis)
             {
+                SimonSays.Stop();
                 SimonSays.Play();
-                System.Threading.Thread.Sleep(500);
             }
             else
             {
+                SimonDoesnt.Stop();
                 SimonDoesnt.Play();
-                System.Threading.Thread.Sleep(500);
             }
         }
         private bool randomBool()
