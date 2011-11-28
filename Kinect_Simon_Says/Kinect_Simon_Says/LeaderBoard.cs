@@ -138,6 +138,11 @@ namespace Kinect_Simon_Says
         {
             LeaderBoardCanvas.Visibility = Visibility.Hidden;
         }
+        public bool isVisible()
+        {
+            return LeaderBoardCanvas.IsVisible;
+        }
+
         public void fillLeaderBoard(List<highscore> _highscores)
         {
             for (int i = 0; i < 10 && i < _highscores.Count; i++)

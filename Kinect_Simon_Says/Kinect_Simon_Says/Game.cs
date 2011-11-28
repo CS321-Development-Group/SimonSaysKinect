@@ -327,6 +327,7 @@ namespace Kinect_Simon_Says
         HighScores kinectHighScores;
         Menu mainMenu;
         LeaderBoard kssLeaderBoard;
+        int leaderboardtimer;
 
 
         private Color baseColor = Color.FromRgb(0, 0, 0);
@@ -355,6 +356,7 @@ namespace Kinect_Simon_Says
             mainMenu.addButton(new Button("Leaderboard"), MenuButtonLocation.RightCenter);            
             mainMenu.draw();
             kssLeaderBoard = new LeaderBoard();
+            leaderboardtimer = 0;
         }
 
         public void SetFramerate(double actualFramerate)
@@ -484,6 +486,23 @@ namespace Kinect_Simon_Says
                         kssLeaderBoard.showLeaderBoard();
                         break;
                 }
+                if (kssLeaderBoard.isVisible())
+                {
+
+                    if (MousePos.X >= 312 && MousePos.X <= 487 &&
+                       MousePos.Y >= 460 && MousePos.Y <= 490)
+                    {
+                        if (leaderboardtimer == 100)
+                        {
+                            kssLeaderBoard.hideLeaderBoard();
+                        }
+                        else
+                            leaderboardtimer = leaderboardtimer + 1;
+                    }
+                    else
+                        leaderboardtimer = 0;
+                }
+
             }
         }
         public void DrawCursor(Point currPos, UIElementCollection children)
