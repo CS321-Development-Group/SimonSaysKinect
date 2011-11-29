@@ -111,9 +111,15 @@ namespace Kinect_Simon_Says
         private void DrawGeometry(StreamGeometryContext context)
         {
             Size WaveSize = new Size(WaveHeight, WaveHeight);
-            
-            Point StartPoint = new Point(StartPointX, (PlayfieldHeight-50) * (1 / (Game.STARTING_LIVES - RemainingLives + 1)));
-            Point EndPoint = new Point(EndPointX, (PlayfieldHeight-50) * 1/(Game.STARTING_LIVES - RemainingLives + 1));
+            Point StartPoint;
+            Point EndPoint;
+            StartPoint = new Point(StartPointX, (PlayfieldHeight-50) * (RemainingLives / Game.STARTING_LIVES  ));
+            EndPoint = new Point(EndPointX, (PlayfieldHeight - 50) * (RemainingLives / Game.STARTING_LIVES));
+            if (RemainingLives == 0)
+            {
+                StartPoint = new Point(StartPointX, (PlayfieldHeight - 50));
+                EndPoint = new Point(EndPointX, (PlayfieldHeight - 50));
+            }
             Point BottomRight = new Point(EndPointX, PlayfieldHeight);
             Point BottomLeft = new Point(StartPointX, PlayfieldHeight);
             

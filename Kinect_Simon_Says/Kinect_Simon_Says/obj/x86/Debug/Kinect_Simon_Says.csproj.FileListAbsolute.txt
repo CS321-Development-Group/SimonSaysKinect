@@ -151,3 +151,4 @@ D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\
 D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\Welcome.wav
 D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\obj\x86\Debug\Kinect_Simon_Says_Content.g.cs
 D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\GameOver.wav
+D:\Users\Ben Hubler\Desktop\SimonSaysKinect\Kinect_Simon_Says\Kinect_Simon_Says\bin\Debug\audio\InvalidPose.wav

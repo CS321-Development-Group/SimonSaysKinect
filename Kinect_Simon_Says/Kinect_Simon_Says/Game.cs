@@ -304,7 +304,7 @@ namespace Kinect_Simon_Says
         MediaPlayer GameOver = new MediaPlayer();
         MediaPlayer SimonDoesnt = new MediaPlayer();
         MediaPlayer SimonSays = new MediaPlayer();
-
+        MediaPlayer InvalidPose = new MediaPlayer();
         private double targetFrameRate = 60;
         private int intraFrames = 1;
         private int frameCount = 0;
@@ -367,7 +367,7 @@ namespace Kinect_Simon_Says
             GameOver.Open(new Uri(".\\audio\\GameOver.wav", UriKind.RelativeOrAbsolute));
             SimonDoesnt.Open(new Uri(".\\audio\\SimonDoesnt.wav", UriKind.RelativeOrAbsolute));
             SimonSays.Open(new Uri(".\\audio\\SimonSays.wav", UriKind.RelativeOrAbsolute));
-
+            InvalidPose.Open(new Uri(".\\audio\\InvalidPose.wav", UriKind.RelativeOrAbsolute));
         }
 
         public void SetFramerate(double actualFramerate)
@@ -604,13 +604,13 @@ namespace Kinect_Simon_Says
             }
             else if (this.gameMode == Game.GameMode.Paused)
             {
+                mainMenu.unhideMenu();
                 if (kssLeaderBoard.isVisible())
                 {
                     kssLeaderBoard.draw(grid.Children);
                 }
                 children.Add(Water);
                 children.Add(poseTimer);
-                mainMenu.unhideMenu();
             }
             else if (this.gameMode == Game.GameMode.Off)
             {
@@ -630,6 +630,10 @@ namespace Kinect_Simon_Says
                         {
                             highscoreMenu.ActivateHighScoreMenu();
                             highscoreMenu.inputHighScore(kinectHighScores, score.Value, grid, currPos, ref gameMode);
+                        }
+                        else
+                        {
+                            gameMode = Game.GameMode.Off;
                         }
                     }
                 }
@@ -689,6 +693,11 @@ namespace Kinect_Simon_Says
         }
         private void invalidPose()
         {
+            InvalidPose.Stop();
+            InvalidPose.Volume = .25;
+            InvalidPose.Play();
+            System.Threading.Thread.Sleep(1000);
+ 
             livesRemaining -= 1;
             Water.UpdateIndicator(livesRemaining);
             if (livesRemaining >= 1)
